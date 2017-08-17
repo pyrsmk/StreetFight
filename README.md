@@ -29,9 +29,12 @@ $match->add('isset() === false', new StreetFight\Challenger(function() {
 $match->fight();
 
 /*
-    Will return :
+    Will return, in percent (the less the better) :
 
-
+    [
+        'isset() === false' => 100,
+        '!isset()' => 97.19
+    ]
 */
 ```
 
