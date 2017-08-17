@@ -71,9 +71,10 @@ class Match implements MatchInterface
                 $t0 = microtime(true);
                 $challenger->kick();
                 $t1 = microtime(true);
+                $t2 = $t1 - $t0;
                 // Add time
-                $times[$name] += $t1 - $t0;
-                $overallTime += $times[$name];
+                $times[$name] += $t2;
+                $overallTime += $t2;
                 // Clean up memory
                 gc_collect_cycles();
             }
