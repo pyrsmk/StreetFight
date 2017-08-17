@@ -1,0 +1,22 @@
+{
+    "name": "pyrsmk/streetfight",
+    "description": "A micro benchmarking tool",
+    "keywords": [
+        "micro",
+        "benchmark"
+    ],
+    "license": "MIT",
+    "authors": [{
+        "name": "Aurélien Delogu",
+        "email": "dev@dreamysource.fr",
+        "homepage": "http://dreamysource.io/project/streetfight"
+    }],
+    "require": {
+        "php": ">=7.1.0"
+    },
+    "autoload": {
+        "psr-4" : {
+            "StreetFight\\" : "src/"
+        }
+    }
+}
