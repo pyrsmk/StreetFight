@@ -29,7 +29,7 @@ class Match implements MatchInterface
      * @param int $time
      * @return void
      */
-    public function __construct(int $time = 2000)
+    public function __construct(int $time = 0)
     {
         $this->time = $time;
     }
@@ -58,7 +58,8 @@ class Match implements MatchInterface
             throw new Exception("In order to run the benchmark, there must be at least 2 challengers in the match");
         }
         // Prepare
-        $overall = 0;
+        $overallTime = 0;
+        $maxTime = $this->time === 0 ? count($this->challengers) * 1000 : $this->time;
         $times = [];
         foreach ($this->challengers as $name => $challenger) {
             $times[$name] = 0;
@@ -72,11 +73,11 @@ class Match implements MatchInterface
                 $t1 = microtime(true);
                 // Add time
                 $times[$name] += $t1 - $t0;
-                $overall += $times[$name];
+                $overallTime += $times[$name];
                 // Clean up memory
                 gc_collect_cycles();
             }
-        } while($overall < $this->time);
+        } while($overallTime < $maxTime);
         // Profiling
         $max = max($times);
         $percents = [];
