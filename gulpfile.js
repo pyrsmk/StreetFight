@@ -7,6 +7,7 @@ var version = fs.readFileSync('README.md', {encoding:'utf8'}).match(/^[\w-]+ ([0
 // ======================================== gulp publish
 
 gulp.task('publish', shell.task([
+    'git push',
     "git tag -a "+version+" -m '"+version+"'",
     'git push --tags'
 ]));
