@@ -14,7 +14,7 @@ class Match implements MatchInterface
      *
      * @var int
      */
-    protected $time;
+    protected $matchTime;
 
     /**
      * The challengers
@@ -29,19 +29,19 @@ class Match implements MatchInterface
      * @param int $time
      * @return void
      */
-    public function __construct(int $time = 0)
+    public function __construct(int $matchTime = 0)
     {
-        $this->time = $time;
+        $this->matchTime = $matchTime;
     }
 
     /**
      * Add a challenger
      *
      * @param string $name
-     * @param StreetFight\ChallengerInterface $challenger
+     * @param callable $challenger
      * @return void
      */
-    public function add($name, ChallengerInterface $challenger) : void
+    public function add($name, callable $challenger) : void
     {
         $this->challengers[$name] = $challenger;
     }
@@ -59,18 +59,23 @@ class Match implements MatchInterface
         }
         // Prepare
         $overallTime = 0;
-        $maxTime = $this->time === 0 ? count($this->challengers) * 1000 : $this->time;
+        if ($this->matchTime === 0) {
+            $maxTime = count($this->challengers) * 1000;
+        } else {
+            $maxTime = $this->matchTime;
+        }
         $times = [];
         foreach ($this->challengers as $name => $challenger) {
             $times[$name] = 0;
         }
         // Run benchmarks
+        ob_start();
         $overallTime0 = microtime(true);
         do {
             foreach ($this->challengers as $name => $challenger) {
                 // Run benchmark
                 $t0 = microtime(true);
-                $challenger->kick();
+                call_user_func($challenger);
                 $t1 = microtime(true);
                 // Add time
                 $times[$name] += $t1 - $t0;
@@ -79,7 +84,8 @@ class Match implements MatchInterface
             }
             $overallTime1 = microtime(true);
             $overallTime = ($overallTime1 - $overallTime0) * 1000;
-        } while($overallTime < $maxTime);
+        } while ($overallTime < $maxTime);
+        ob_end_clean();
         // Profiling
         $max = max($times);
         $percents = [];
