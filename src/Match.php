@@ -65,19 +65,20 @@ class Match implements MatchInterface
             $times[$name] = 0;
         }
         // Run benchmarks
+        $overallTime0 = microtime(true);
         do {
             foreach ($this->challengers as $name => $challenger) {
                 // Run benchmark
                 $t0 = microtime(true);
                 $challenger->kick();
                 $t1 = microtime(true);
-                $t2 = $t1 - $t0;
                 // Add time
-                $times[$name] += $t2;
-                $overallTime += $t2;
+                $times[$name] += $t1 - $t0;
                 // Clean up memory
                 gc_collect_cycles();
             }
+            $overallTime1 = microtime(true);
+            $overallTime = ($overallTime1 - $overallTime0) * 1000;
         } while($overallTime < $maxTime);
         // Profiling
         $max = max($times);
