@@ -10,11 +10,28 @@ use Exception;
 class Match implements MatchInterface
 {
     /**
+     * The max time of a match
+     *
+     * @var int
+     */
+    private $matchTime;
+
+    /**
      * The challengers
      *
      * @var array
      */
     protected $challengers = [];
+
+    /**
+     * Constructor
+     *
+     * @param int|null $matchTime
+     */
+    public function __construct(?int $matchTime = null)
+    {
+        $this->matchTime = $matchTime;
+    }
 
     /**
      * Add a challenger
@@ -40,7 +57,11 @@ class Match implements MatchInterface
             throw new Exception('In order to run the benchmark, there must be at least 2 challengers in the match');
         }
         // Prepare
-        $timeOver = count($this->challengers) * $this->challengerTime;
+        if ($this->matchTime === null) {
+            $timeOver = count($this->challengers) * 1000;
+        } else {
+            $timeOver = $this->matchTime;
+        }
         $chrono = new Chrono();
         // Run benchmarks
         ob_start();
