@@ -40,7 +40,7 @@ final class Report
         }
         arsort($fightingTime);
         // Format time as percentage
-        $theSlower = max($performance);
+        $theSlower = max($fightingTime);
         return array_map(function ($time) use ($theSlower) {
             return round($time / $theSlower * 100, 2);
         }, $fightingTime);

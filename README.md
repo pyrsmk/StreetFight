@@ -1,4 +1,4 @@
-StreetFight 3.0.2
+StreetFight 3.0.3
 =================
 
 StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
