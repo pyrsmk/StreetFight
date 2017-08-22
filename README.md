@@ -41,10 +41,10 @@ $match->fight();
 Notes
 -----
 
-By default, the tool will run for `1000ms` for each test. You can force a specific ms time with :
+By default, the match will run for a total of `1000ms` for each test. If needed, when an test iteration is taking much more than `1000ms` You can force a match time with :
 
 ```php
-// For 750ms
+// Run for 750ms
 $match = new StreetFight\Match(750);
 ```
 
