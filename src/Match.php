@@ -21,7 +21,7 @@ class Match implements MatchInterface
      *
      * @var array
      */
-    protected $challengers = [];
+    private $challengers = [];
 
     /**
      * Constructor
