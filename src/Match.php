@@ -37,7 +37,7 @@ class Match implements MatchInterface
     {
         // Verify
         if (count($this->challengers) < 2) {
-            throw new Exception("In order to run the benchmark, there must be at least 2 challengers in the match");
+            throw new Exception('In order to run the benchmark, there must be at least 2 challengers in the match');
         }
         // Prepare
         $timeOver = count($this->challengers) * $this->challengerTime;
@@ -52,14 +52,7 @@ class Match implements MatchInterface
         } while ($chrono->getElapsedTime() < $timeOver);
         ob_end_clean();
         // Profiling
-        $performance = [];
-        foreach($this->challengers as $name => $challenger){
-            $performance[$name] = $challenger->getFightingTime();
-        }
-        arsort($performance);
-        $theSlower = max($performance);
-        return array_map(function($time) use($theSlower) {
-            return round($time / $theSlower * 100, 2);
-        }, $performance);
+        $report = new Report($this->challengers);
+        return $report->getPerformance();
     }
 }
