@@ -40,7 +40,7 @@ final class Challenger
     public function kick() : void
     {
         $chrono = new Chrono();
-        call_user_func($challenger);
+        call_user_func($this->callable);
         $this->fightingTime += $chrono->getElapsedTime();
     }
 
