@@ -8,11 +8,11 @@ namespace StreetFight;
 final class Challenger
 {
     /**
-     * The callable to run
+     * The closure to run
      *
-     * @var callable
+     * @var Closure
      */
-    private $callable;
+    private $closure;
 
     /**
      * Total time passed to fight
@@ -24,23 +24,23 @@ final class Challenger
     /**
      * Constructor
      *
-     * @param callable $callable
+     * @param Closure $closure
      */
-    public function __construct(callable $callable)
+    public function __construct(Closure $closure)
     {
-        $this->callable = $callable;
+        $this->closure = $closure;
         $this->totalTime = 0;
     }
 
     /**
-     * Run the callable and return the elapsed time
+     * Run the closure
      *
      * @return void
      */
     public function kick() : void
     {
         $chrono = new Chrono();
-        call_user_func($this->callable);
+        call_user_func($this->closure);
         $this->fightingTime += $chrono->getElapsedTime();
     }
 

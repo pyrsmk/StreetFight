@@ -34,15 +34,15 @@ class Match implements MatchInterface
     }
 
     /**
-     * Add a challenger
+     * Add a new challenger
      *
      * @param string $name
-     * @param callable $callable
+     * @param Challenger $challenger
      * @return void
      */
-    public function add($name, callable $callable) : void
+    public function add($name, Challenger $challenger) : void
     {
-        $this->challengers[$name] = new Challenger($callable);
+        $this->challengers[$name] = new Challenger($challenger);
     }
 
     /**

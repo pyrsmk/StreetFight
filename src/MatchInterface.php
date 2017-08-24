@@ -15,13 +15,13 @@ interface MatchInterface
     public function __construct(?int $matchTime = null);
 
     /**
-     * Add a challenger
+     * Add a new challenger
      *
      * @param string $name
-     * @param callable $challenger
+     * @param Challenger $challenger
      * @return void
      */
-    public function add($name, callable $challenger) : void;
+    public function add($name, Challenger $challenger) : void;
 
     /**
      * Let's start the fight!
