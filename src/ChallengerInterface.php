@@ -8,7 +8,7 @@ namespace StreetFight;
 interface ChallengerInterface
 {
     /**
-     * Run the closure
+     * Run the callable
      *
      * @return void
      */
