@@ -16,19 +16,23 @@ final class Chrono implements ChronoInterface
 
     /**
      * Constructor
+     *
+     * @param Time $time
      */
-    public function __construct()
+    public function __construct(TimeStamp $time)
     {
-        $this->initialTime = microtime(true);
+        $this->initialTime = $time;
     }
 
     /**
      * Get the elapsed time (milliseconds)
      *
+     * @param int $unit
      * @return float
      */
-    public function getElapsedTime()
+    public function getElapsedTime(int $unit = self::MS)
     {
-        return (microtime(true) - $this->initialTime) * 1000;
+        $now = new TimeStamp();
+        return $now->get($unit) - $this->initialTime->get($unit);
     }
 }

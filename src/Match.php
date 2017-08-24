@@ -62,9 +62,9 @@ class Match implements MatchInterface
         } else {
             $timeOver = $this->matchTime;
         }
-        $chrono = new Chrono();
         // Run benchmarks
         ob_start();
+        $chrono = new Chrono(new TimeStamp());
         do {
             foreach ($this->challengers as $name => $challenger) {
                 $challenger->kick();
