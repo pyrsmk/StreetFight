@@ -1,4 +1,4 @@
-StreetFight 4.1.0
+StreetFight 5.0.0
 =================
 
 StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
@@ -18,13 +18,13 @@ Example/Use
 ```php
 $match = new StreetFight\Match();
 
-$match->add('!isset()', new StreetFight\Challenger(function() {
+$match->add('!isset()', function() {
     !isset($undefined_var);
-}));
+});
 
-$match->add('isset() === false', new StreetFight\Challenger(function() {
+$match->add('isset() === false', function() {
     isset($undefined_var) === false;
-}));
+});
 
 $match->fight();
 
@@ -37,6 +37,8 @@ $match->fight();
     ]
 */
 ```
+
+`StreetFight\Match#add()` can accept any callable.
 
 Notes
 -----
