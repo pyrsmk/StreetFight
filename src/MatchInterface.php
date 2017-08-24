@@ -18,10 +18,10 @@ interface MatchInterface
      * Add a new challenger
      *
      * @param string $name
-     * @param Challenger $challenger
+     * @param callable $callable
      * @return void
      */
-    public function add($name, Challenger $challenger) : void;
+    public function add($name, callable $callable) : void;
 
     /**
      * Let's start the fight!
