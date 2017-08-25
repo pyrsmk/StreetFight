@@ -30,7 +30,7 @@ final class Chrono implements ChronoInterface
      * @param int $unit
      * @return float
      */
-    public function getElapsedTime(int $unit = self::MS)
+    public function getElapsedTime(int $unit = TimeStampInterface::MS)
     {
         $now = new TimeStamp();
         return $now->get($unit) - $this->initialTime->get($unit);
