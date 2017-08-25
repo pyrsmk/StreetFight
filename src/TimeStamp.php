@@ -1,5 +1,7 @@
 <?php
 
+namespace StreetFight;
+
 use Exception;
 
 /**

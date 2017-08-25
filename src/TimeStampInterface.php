@@ -1,5 +1,7 @@
 <?php
 
+namespace StreetFight;
+
 /**
  * Timestamp interface
  */
