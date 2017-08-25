@@ -7,9 +7,9 @@ interface ChronoInterface
     /**
      * Constructor
      *
-     * @param Time $time
+     * @param TimeStamp $timestamp
      */
-    public function __construct(Time $time);
+    public function __construct(TimeStamp $timestamp);
 
     /**
      * Get the elapsed time (milliseconds)

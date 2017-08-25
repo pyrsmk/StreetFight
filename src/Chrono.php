@@ -17,11 +17,11 @@ final class Chrono implements ChronoInterface
     /**
      * Constructor
      *
-     * @param Time $time
+     * @param TimeStamp $timestamp
      */
-    public function __construct(TimeStamp $time)
+    public function __construct(TimeStamp $timestamp)
     {
-        $this->initialTime = $time;
+        $this->initialTime = $timestamp;
     }
 
     /**
