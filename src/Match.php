@@ -70,7 +70,7 @@ class Match implements MatchInterface
                 $challenger->kick();
                 gc_collect_cycles();
             }
-        } while ($chrono->getElapsedTime() < $timeOver);
+        } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
         ob_end_clean();
         // Profiling
         $report = new Report($this->challengers);

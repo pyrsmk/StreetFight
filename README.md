@@ -1,4 +1,4 @@
-StreetFight 5.0.5
+StreetFight 5.0.6
 =================
 
 StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
