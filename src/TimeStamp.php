@@ -48,6 +48,6 @@ final class TimeStamp implements TimeStampInterface
             default:
                 throw new Exception('Invalid specified unit');
         }
-        return $this->time / $factor;
+        return $this->time * $factor;
     }
 }
