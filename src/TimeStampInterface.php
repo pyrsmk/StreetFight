@@ -35,5 +35,5 @@ interface TimeStampInterface
      * @param int $unit
      * @return void
      */
-    public function get(int $unit = self::MS);
+    public function get(int $unit = self::S);
 }
