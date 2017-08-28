@@ -17,5 +17,5 @@ interface ChronoInterface
      * @param int $unit
      * @return float
      */
-    public function getElapsedTime(int $unit = TimeStampInterface::MS);
+    public function getElapsedTime(int $unit = TimeStampInterface::S);
 }
