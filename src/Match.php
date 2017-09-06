@@ -2,6 +2,7 @@
 
 namespace StreetFight;
 
+use Closure;
 use Exception;
 
 /**
@@ -26,14 +27,14 @@ class Match implements MatchInterface
     /**
      * Begin callback
      *
-     * @var callable
+     * @var Closure
      */
     private $beginCallback;
 
     /**
      * End callback
      *
-     * @var callable
+     * @var Closure
      */
     private $endCallback;
 
@@ -56,34 +57,34 @@ class Match implements MatchInterface
      * Add a new challenger
      *
      * @param string $name
-     * @param callable $callable
+     * @param Closure $closure
      * @return void
      */
-    public function add($name, callable $callable) : void
+    public function add($name, Closure $closure) : void
     {
-        $this->challengers[$name] = new Challenger($callable);
+        $this->challengers[$name] = new Challenger($closure);
     }
 
     /**
      * Define the begin callback
      *
-     * @param callable $callable
+     * @param Closure $closure
      * @return void
      */
-    public function begin(callable $callable) : void
+    public function begin(Closure $closure) : void
     {
-        $this->beginCallback = $callable;
+        $this->beginCallback = $closure;
     }
 
     /**
      * Define the end callback
      *
-     * @param callable $callable
+     * @param Closure $closure
      * @return void
      */
-    public function end(callable $callable) : void
+    public function end(Closure $closure) : void
     {
-        $this->endCallback = $callable;
+        $this->endCallback = $closure;
     }
 
     /**
@@ -108,9 +109,9 @@ class Match implements MatchInterface
         $chrono = new Chrono(new TimeStamp());
         do {
             foreach ($this->challengers as $name => $challenger) {
-                call_user_func($this->beginCallback);
+                ($this->beginCallback)();
                 $challenger->kick();
-                call_user_func($this->endCallback);
+                ($this->endCallback)();
                 gc_collect_cycles();
             }
         } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
