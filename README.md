@@ -1,4 +1,4 @@
-StreetFight 5.1.0
+StreetFight 6.0.0
 =================
 
 StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
@@ -43,20 +43,43 @@ $match->fight();
 */
 ```
 
-`StreetFight\Match#add()` can accept any callable.
-
-Begin/End
+Callbacks
 ---------
 
 If you need to run some specific routines before and after each iteration, you can do :
 
 ```php
-$match->begin(function () {
+$match->begin(function ($container) {
     // some tasks
 });
 
-$match->end(function () {
+$match->end(function ($container) {
     // some other tasks
+});
+```
+
+For ease of use, a [container](https://github.com/pyrsmk/Chernozem) is passed to each callback so you can register values/services that you'll pass to your benchmarks. Per example :
+
+```php
+$container = $match->getContainer();
+$container['filename'] = __DIR__ . '/test.txt';
+
+$streetFight->begin(function ($container) {
+    touch($container['filename']);
+});
+
+$streetFight->end(function ($container) {
+    unlink($container['filename']);
+});
+
+$streetFight->add('file_put_contents (overwrite)', function ($container) {
+    file_put_contents($container['filename'], 'contents');
+});
+
+$streetFight->add('fwrite (overwrite)', function ($container) {
+    $f = fopen($container['filename'], 'w');
+    fwrite($f, 'contents');
+    fclose($f);
 });
 ```
 
