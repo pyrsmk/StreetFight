@@ -23,13 +23,6 @@ interface TimeStampInterface
     const µS = 2;
 
     /**
-     * Constructor
-     *
-     * @return void
-     */
-    public function __construct();
-
-    /**
      * Get the timestamp
      *
      * @param int $unit

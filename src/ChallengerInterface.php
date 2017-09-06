@@ -2,18 +2,13 @@
 
 namespace StreetFight;
 
+use Closure;
+
 /**
  * Challenger interface
  */
 interface ChallengerInterface
 {
-    /**
-     * Constructor
-     *
-     * @param callable $callable
-     */
-    public function __construct(callable $callable);
-
     /**
      * Run the callable
      *
