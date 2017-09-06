@@ -108,12 +108,14 @@ class Match implements MatchInterface
         ob_start();
         $chrono = new Chrono(new TimeStamp());
         do {
-            foreach ($this->challengers as $name => $challenger) {
-                ($this->beginCallback)();
+            ($this->beginCallback)();
+            foreach ($this->challengers as $challenger) {
+                ($this->beforeCallback)();
                 $challenger->kick();
-                ($this->endCallback)();
+                ($this->afterCallback)();
                 gc_collect_cycles();
             }
+            ($this->endCallback)();
         } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
         ob_end_clean();
         // Profiling
