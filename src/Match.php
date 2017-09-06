@@ -109,17 +109,27 @@ class Match implements MatchInterface
         $chrono = new Chrono(new TimeStamp());
         do {
             ($this->beginCallback)();
-            foreach ($this->challengers as $challenger) {
-                ($this->beforeCallback)();
-                $challenger->kick();
-                ($this->afterCallback)();
-                gc_collect_cycles();
-            }
+            $this->_iterate();
             ($this->endCallback)();
         } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
         ob_end_clean();
         // Profiling
         $report = new Report($this->challengers);
         return $report->getPerformance();
+    }
+
+    /**
+     * Run an iteration over registered benchmarks
+     *
+     * @return void
+     */
+    private function _iterate() : void
+    {
+        foreach ($this->challengers as $challenger) {
+            ($this->beforeCallback)();
+            $challenger->kick();
+            ($this->afterCallback)();
+            gc_collect_cycles();
+        }
     }
 }
