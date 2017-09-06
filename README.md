@@ -1,4 +1,4 @@
-StreetFight 5.0.6
+StreetFight 5.1.0
 =================
 
 StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
@@ -12,17 +12,22 @@ StreetFight requires PHP 7.1.
 composer require pyrsmk/streetfight
 ```
 
+How does it work?
+-----------------
+
+StreetFight, contrary to many benchmarks we can found on the net, has been designed to have stable results at each run. Instead of iterate `n` times on each benchmark one after the other, it iterates `n` times on all benchmarks. It avoids caching mecanism side effects.
+
 Example/Use
 -----------
 
 ```php
 $match = new StreetFight\Match();
 
-$match->add('!isset()', function() {
+$match->add('!isset()', function () {
     !isset($undefined_var);
 });
 
-$match->add('isset() === false', function() {
+$match->add('isset() === false', function () {
     isset($undefined_var) === false;
 });
 
@@ -39,6 +44,21 @@ $match->fight();
 ```
 
 `StreetFight\Match#add()` can accept any callable.
+
+Begin/End
+---------
+
+If you need to run some specific routines before and after each iteration, you can do :
+
+```php
+$match->begin(function () {
+    // some tasks
+});
+
+$match->end(function () {
+    // some other tasks
+});
+```
 
 Notes
 -----

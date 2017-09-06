@@ -21,7 +21,21 @@ class Match implements MatchInterface
      *
      * @var array
      */
-    private $challengers = [];
+    private $challengers;
+
+    /**
+     * Begin callback
+     *
+     * @var callable
+     */
+    private $beginCallback;
+
+    /**
+     * End callback
+     *
+     * @var callable
+     */
+    private $endCallback;
 
     /**
      * Constructor
@@ -31,6 +45,11 @@ class Match implements MatchInterface
     public function __construct(?int $matchTime = null)
     {
         $this->matchTime = $matchTime;
+        $this->challengers = [];
+        $this->beginCallback = function () {
+        };
+        $this->endCallback = function () {
+        };
     }
 
     /**
@@ -43,6 +62,28 @@ class Match implements MatchInterface
     public function add($name, callable $callable) : void
     {
         $this->challengers[$name] = new Challenger($callable);
+    }
+
+    /**
+     * Define the begin callback
+     *
+     * @param callable $callable
+     * @return void
+     */
+    public function begin(callable $callable) : void
+    {
+        $this->beginCallback = $callable;
+    }
+
+    /**
+     * Define the end callback
+     *
+     * @param callable $callable
+     * @return void
+     */
+    public function end(callable $callable) : void
+    {
+        $this->endCallback = $callable;
     }
 
     /**
@@ -67,7 +108,9 @@ class Match implements MatchInterface
         $chrono = new Chrono(new TimeStamp());
         do {
             foreach ($this->challengers as $name => $challenger) {
+                call_user_func($this->beginCallback);
                 $challenger->kick();
+                call_user_func($this->endCallback);
                 gc_collect_cycles();
             }
         } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
