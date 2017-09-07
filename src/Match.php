@@ -113,28 +113,53 @@ class Match implements MatchInterface
      */
     public function fight() : array
     {
-        // Verify
+        $this->_verifyNumberOfChallengers();
+        $timeOver = $this->_getMaximumMatchTime();
+        $this->_runMatch($timeOver);
+        $report = new Report($this->challengers);
+        return $report->getPerformance();
+    }
+
+    /**
+     * Verify the number of challengers
+     *
+     * @return void
+     */
+    private function _verifyNumberOfChallengers() : void
+    {
         if (count($this->challengers) < 2) {
             throw new Exception('In order to run the benchmark, there must be at least 2 challengers in the match');
         }
-        // Prepare
+    }
+
+    /**
+     * Get the maximum time allowed for a match
+     *
+     * @return int
+     */
+    private function _getMaximumMatchTime() : int
+    {
         if ($this->matchTime === null) {
-            $timeOver = count($this->challengers) * 1000;
+            return count($this->challengers) * 1000;
         } else {
-            $timeOver = $this->matchTime;
+            return $this->matchTime;
         }
-        // Run benchmarks
+    }
+
+    /**
+     * Run benchmarks
+     *
+     * @param int $timeOver
+     * @return void
+     */
+    private function _runMatch(int $timeOver) : void
+    {
         ob_start();
         $chrono = new Chrono(new TimeStamp());
         do {
-            ($this->beginCallback)($this->container);
-            $this->_iterate();
-            ($this->endCallback)($this->container);
+            $this->_runRound();
         } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
         ob_end_clean();
-        // Profiling
-        $report = new Report($this->challengers);
-        return $report->getPerformance();
     }
 
     /**
@@ -142,11 +167,13 @@ class Match implements MatchInterface
      *
      * @return void
      */
-    private function _iterate() : void
+    private function _runRound() : void
     {
+        ($this->beginCallback)($this->container);
         foreach ($this->challengers as $challenger) {
             $challenger->kick($this->container);
             gc_collect_cycles();
         }
+        ($this->endCallback)($this->container);
     }
 }
