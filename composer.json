@@ -12,7 +12,9 @@
         "homepage": "http://dreamysource.io/project/streetfight"
     }],
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=7.1.0",
+        "pyrsmk/chernozem": "^4.2",
+        "psr/container": "^1.0"
     },
     "autoload": {
         "psr-4" : {

@@ -4,12 +4,20 @@ namespace StreetFight;
 
 use Closure;
 use Exception;
+use Chernozem\Container;
 
 /**
  * A street fight match
  */
 class Match implements MatchInterface
 {
+    /**
+     * Container
+     *
+     * @var Chernozem\Container
+     */
+    private $container;
+
     /**
      * The max time of a match
      *
@@ -45,12 +53,23 @@ class Match implements MatchInterface
      */
     public function __construct(?int $matchTime = null)
     {
+        $this->container = new Container();
         $this->matchTime = $matchTime;
         $this->challengers = [];
         $this->beginCallback = function () {
         };
         $this->endCallback = function () {
         };
+    }
+
+    /**
+     * Get container
+     *
+     * @return Container
+     */
+    public function getContainer() : Container
+    {
+        return $this->container;
     }
 
     /**
@@ -108,9 +127,9 @@ class Match implements MatchInterface
         ob_start();
         $chrono = new Chrono(new TimeStamp());
         do {
-            ($this->beginCallback)();
+            ($this->beginCallback)($this->container);
             $this->_iterate();
-            ($this->endCallback)();
+            ($this->endCallback)($this->container);
         } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
         ob_end_clean();
         // Profiling
@@ -126,9 +145,7 @@ class Match implements MatchInterface
     private function _iterate() : void
     {
         foreach ($this->challengers as $challenger) {
-            ($this->beforeCallback)();
-            $challenger->kick();
-            ($this->afterCallback)();
+            $challenger->kick($this->container);
             gc_collect_cycles();
         }
     }

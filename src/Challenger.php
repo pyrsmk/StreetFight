@@ -3,6 +3,7 @@
 namespace StreetFight;
 
 use Closure;
+use Psr\Container\ContainerInterface;
 
 /**
  * Here comes a new challenger!
@@ -37,12 +38,13 @@ final class Challenger
     /**
      * Run the callable
      *
+     * @param Psr\Container\ContainerInterface $container
      * @return void
      */
-    public function kick() : void
+    public function kick(ContainerInterface $container) : void
     {
         $chrono = new Chrono(new TimeStamp());
-        ($this->closure)();
+        ($this->closure)($container);
         $this->fightingTime += $chrono->getElapsedTime();
     }
 
