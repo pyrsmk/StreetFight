@@ -7,7 +7,7 @@ use Exception;
 /**
  * A performance report
  */
-final class Report
+final class Report implements ReportInterface
 {
     /**
      * Percentage type
