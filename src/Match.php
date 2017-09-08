@@ -151,7 +151,7 @@ class Match implements MatchInterface
         foreach ($this->challengers as $name => $closure) {
             $chrono = new Chrono();
             $closure($this->container);
-            $board->registerResult($id, $name, $chrono->getElapsedTime(Chrono::MS));
+            $board->registerResult($id, $name, $chrono->getElapsedTime());
             $this->_cleanUpMemory();
         }
         $this->_runEndRoutine();
