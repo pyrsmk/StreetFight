@@ -12,12 +12,22 @@ final class Report
     /**
      * Percentage type
      */
-    const PERCENTAGE_TYPE = 1;
+    const PERCENTAGE = 1;
 
     /**
-     * Time type
+     * Seconds type
      */
-    const TIME_TYPE = 2;
+    const SECONDS = 2;
+
+    /**
+     * Milliseconds type
+     */
+    const MILLISECONDS = 3;
+
+    /**
+     * Microseconds type
+     */
+    const MICROSECONDS = 4;
 
     /**
      * The results board
@@ -44,21 +54,14 @@ final class Report
      */
     public function getPerformance(int $type = self::PERCENTAGE_TYPE) : array
     {
-        $results = $this->_sortResults(
-            $this->_computeTotal(
-                $this->board->getMatchResults()
+        return $this->_sortResults(
+            $this->_formatResults(
+                $type,
+                $this->_computeTotal(
+                    $this->board->getMatchResults()
+                )
             )
         );
-        switch ($type) {
-            case self::PERCENTAGE_TYPE:
-                return $this->_formatToPercentage($results);
-                break;
-            case self::TIME_TYPE:
-                return $results;
-                break;
-            default:
-                throw new Exception('Invalid type passed');
-        }
     }
 
     /**
@@ -94,6 +97,33 @@ final class Report
     }
 
     /**
+     * Format results
+     *
+     * @param int $type
+     * @param array $results
+     * @return array
+     */
+    private function _formatResults(int $type, array $results) : array
+    {
+        switch ($type) {
+            case self::PERCENTAGE:
+                return $this->_formatToPercentage($results);
+                break;
+            case self::SECONDS:
+                return $this->_formatToSeconds($results);
+                break;
+            case self::MILLISECONDS:
+                return $this->_formatToMilliseconds($results);
+                break;
+            case self::MICROSECONDS:
+                return $this->_formatToMicroseconds($results);
+                break;
+            default:
+                throw new Exception('Invalid report type specified');
+        }
+    }
+
+    /**
      * Format results to percentage
      *
      * @param array $results
@@ -104,6 +134,45 @@ final class Report
         $max = max($results);
         return array_map($results, function ($time) use ($max) {
             return round($time / $max * 100, 2);
+        });
+    }
+
+    /**
+     * Format results to milliseconds
+     *
+     * @param array $results
+     * @return array
+     */
+    private function _formatToSeconds(array $results) : array
+    {
+        return array_map($results, function ($time) {
+            return round($time, 2);
+        });
+    }
+
+    /**
+     * Format results to milliseconds
+     *
+     * @param array $results
+     * @return array
+     */
+    private function _formatToMilliseconds(array $results) : array
+    {
+        return array_map($results, function ($time) {
+            return round($time * 10 ** 3, 2);
+        });
+    }
+
+    /**
+     * Format results to microseconds
+     *
+     * @param array $results
+     * @return array
+     */
+    private function _formatToMicroseconds(array $results) : array
+    {
+        return array_map($results, function ($time) {
+            return round($time * 10 ** 6, 2);
         });
     }
 }
