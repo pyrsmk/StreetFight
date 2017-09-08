@@ -31,8 +31,11 @@ $match->add('isset() === false', function () {
     isset($undefined_var) === false;
 });
 
-$match->fight();
+// Start the fight and return the complete results board
+$board = $match->fight();
 
+$report = new StreetFight\Report($board);
+$report->getPerformance();
 /*
     Will return, in percent (the less the better) :
 
@@ -91,6 +94,22 @@ By default, the match will run for a total of `1000ms` for each test. If needed,
 ```php
 // Run for 750ms
 $match = new StreetFight\Match(750);
+```
+
+If needed, you can retrieve the results report in different units than percentages with :
+
+```php
+$report = new StreetFight\Report($board);
+$report->getPerformance(StreetFight\Report::MS);
+
+/*
+    Available constants :
+
+    - StreetFight\Report::PERCENTAGE
+    - StreetFight\Report::SECONDS
+    - StreetFight\Report::MILLISECONDS
+    - StreetFight\Report::MICROSECONDS
+*/
 ```
 
 Depending on what code you're benchmarking, execution time can exceed the `max_execution_time` directive. Just use `set_time_limit(0)` in that case.
