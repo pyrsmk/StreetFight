@@ -5,10 +5,9 @@ namespace StreetFight;
 interface ChronoInterface
 {
     /**
-     * Get the elapsed time (milliseconds)
+     * Get the elapsed time
      *
-     * @param int $unit
      * @return float
      */
-    public function getElapsedTime(int $unit = TimeStampInterface::S);
+    public function getElapsedTime();
 }

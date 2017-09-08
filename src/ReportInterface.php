@@ -2,10 +2,13 @@
 
 namespace StreetFight;
 
+/**
+ * Performance report interface
+ */
 interface ReportInterface
 {
     /**
-     * Compute and return performance report (in percentage)
+     * Compute and return a performance report
      *
      * @return array
      */

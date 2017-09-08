@@ -2,9 +2,9 @@
 
 namespace StreetFight;
 
+use Chernozem\Container;
 use Closure;
 use Exception;
-use Chernozem\Container;
 
 /**
  * A street fight match
@@ -33,18 +33,18 @@ class Match implements MatchInterface
     private $challengers;
 
     /**
-     * Begin callback
+     * Begin routine
      *
      * @var Closure
      */
-    private $beginCallback;
+    private $beginRoutine;
 
     /**
-     * End callback
+     * End routine
      *
      * @var Closure
      */
-    private $endCallback;
+    private $endRoutine;
 
     /**
      * Constructor
@@ -81,43 +81,80 @@ class Match implements MatchInterface
      */
     public function add($name, Closure $closure) : void
     {
-        $this->challengers[$name] = new Challenger($closure);
+        $this->challengers[$name] = $closure;
     }
 
     /**
-     * Define the begin callback
+     * Define the begin routine callback
      *
      * @param Closure $closure
      * @return void
      */
     public function begin(Closure $closure) : void
     {
-        $this->beginCallback = $closure;
+        $this->beginRoutine = $closure;
     }
 
     /**
-     * Define the end callback
+     * Define the end routine callback
      *
      * @param Closure $closure
      * @return void
      */
     public function end(Closure $closure) : void
     {
-        $this->endCallback = $closure;
+        $this->endRoutine = $closure;
     }
 
     /**
      * Let's start the fight!
      *
-     * @return array
+     * @return StreetFight\BoardInterface
      */
-    public function fight() : array
+    public function fight() : BoardInterface
     {
         $this->_verifyNumberOfChallengers();
-        $timeOver = $this->_getMaximumMatchTime();
-        $this->_runMatch($timeOver);
-        $report = new Report($this->challengers);
-        return $report->getPerformance();
+        return $this->_runMatch(
+            $this->_getMaximumMatchTime()
+        );
+    }
+
+    /**
+     * Run the match
+     *
+     * @param int $maxTime
+     * @return StreetFight\BoardInterface
+     */
+    private function _runMatch(int $maxTime) : BoardInterface
+    {
+        $id = 0;
+        $chrono = new Chrono();
+        $board = new Board(array_keys($this->challengers));
+        $this->_disableOutput();
+        do {
+            $this->_runRound(++$id, $board);
+        } while ($chrono->getElapsedTime(Chrono::MS) < $maxTime);
+        $this->_enableOutput();
+        return $board;
+    }
+
+    /**
+     * Run a round
+     *
+     * @param int $id
+     * @param StreetFight\BoardInterface $board
+     * @return void
+     */
+    private function _runRound(int $id, BoardInterface $board) : void
+    {
+        $this->_runBeginRoutine();
+        foreach ($this->challengers as $name => $closure) {
+            $chrono = new Chrono();
+            $closure($this->container);
+            $board->registerResult($id, $name, $chrono->getElapsedTime(Chrono::MS));
+            $this->_cleanUpMemory();
+        }
+        $this->_runEndRoutine();
     }
 
     /**
@@ -147,33 +184,52 @@ class Match implements MatchInterface
     }
 
     /**
-     * Run benchmarks
+     * Disable the output to avoid benchmark callbacks to print anything
      *
-     * @param int $timeOver
      * @return void
      */
-    private function _runMatch(int $timeOver) : void
+    private function _disableOutput() : void
     {
         ob_start();
-        $chrono = new Chrono(new TimeStamp());
-        do {
-            $this->_runRound();
-        } while ($chrono->getElapsedTime(TimeStamp::MS) < $timeOver);
+    }
+
+    /**
+     * Re-enable the output
+     *
+     * @return void
+     */
+    private function _enableOutput() : void
+    {
         ob_end_clean();
     }
 
     /**
-     * Run an iteration over registered benchmarks
+     * Run the begin routine
      *
      * @return void
      */
-    private function _runRound() : void
+    private function _runBeginRoutine() : void
     {
         ($this->beginCallback)($this->container);
-        foreach ($this->challengers as $challenger) {
-            $challenger->kick($this->container);
-            gc_collect_cycles();
-        }
+    }
+
+    /**
+     * Run the end routine
+     *
+     * @return void
+     */
+    private function _runEndRoutine() : void
+    {
         ($this->endCallback)($this->container);
+    }
+
+    /**
+     * Clean up the memory
+     *
+     * @return void
+     */
+    private function _cleanUpMemory() : void
+    {
+        gc_collect_cycles();
     }
 }
