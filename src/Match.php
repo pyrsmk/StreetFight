@@ -12,11 +12,24 @@ use Exception;
 class Match implements MatchInterface
 {
     /**
-     * Container
-     *
-     * @var Chernozem\Container
+     * Match begin hook
      */
-    private $container;
+    const MATCH_BEGIN = 10;
+
+    /**
+     * Match end hook
+     */
+    const MATCH_END = 11;
+
+    /**
+     * Round begin hook
+     */
+    const ROUND_BEGIN = 20;
+
+    /**
+     * Round end hook
+     */
+    const ROUND_END = 21;
 
     /**
      * The max time of a match
@@ -33,18 +46,18 @@ class Match implements MatchInterface
     private $challengers;
 
     /**
-     * Begin routine
+     * Hook list
      *
-     * @var Closure
+     * @var array
      */
-    private $beginRoutine;
+    private $hooks;
 
     /**
-     * End routine
+     * Container
      *
-     * @var Closure
+     * @var Chernozem\Container
      */
-    private $endRoutine;
+    private $container;
 
     /**
      * Constructor
@@ -53,23 +66,10 @@ class Match implements MatchInterface
      */
     public function __construct(?int $matchTime = null)
     {
-        $this->container = new Container();
         $this->matchTime = $matchTime;
         $this->challengers = [];
-        $this->beginCallback = function () {
-        };
-        $this->endCallback = function () {
-        };
-    }
-
-    /**
-     * Get container
-     *
-     * @return Container
-     */
-    public function getContainer() : Container
-    {
-        return $this->container;
+        $this->hooks = [];
+        $this->container = new Container();
     }
 
     /**
@@ -79,31 +79,38 @@ class Match implements MatchInterface
      * @param Closure $closure
      * @return void
      */
-    public function add($name, Closure $closure) : void
+    public function addNewChallenger($name, Closure $closure) : void
     {
         $this->challengers[$name] = $closure;
     }
 
     /**
-     * Define the begin routine callback
+     * Add a hook
      *
+     * @param int $type
      * @param Closure $closure
      * @return void
      */
-    public function begin(Closure $closure) : void
+    public function addHook(int $type, Closure $closure) : void
     {
-        $this->beginRoutine = $closure;
+        $this->_verifyHookType($type);
+        $this->hooks[$type][] = $closure;
     }
 
     /**
-     * Define the end routine callback
+     * Run hooks from a type
      *
-     * @param Closure $closure
+     * @param int $type
      * @return void
      */
-    public function end(Closure $closure) : void
+    private function _runHook(int $type) : void
     {
-        $this->endRoutine = $closure;
+        $this->_verifyHookType($type);
+        if(isset($this->hooks[$type])) {
+            foreach($this->hooks[$type] as $hook) {
+                $hook($this->container);
+            }
+        }
     }
 
     /**
@@ -131,9 +138,11 @@ class Match implements MatchInterface
         $chrono = new Chrono();
         $board = new Board(array_keys($this->challengers));
         $this->_disableOutput();
+        $this->_runHook(self::MATCH_BEGIN);
         do {
             $this->_runRound(++$id, $board);
         } while ($chrono->getElapsedTime(Chrono::MS) < $maxTime);
+        $this->_runHook(self::MATCH_END);
         $this->_enableOutput();
         return $board;
     }
@@ -147,14 +156,33 @@ class Match implements MatchInterface
      */
     private function _runRound(int $id, BoardInterface $board) : void
     {
-        $this->_runBeginRoutine();
+        $this->_runHook(self::ROUND_BEGIN);
         foreach ($this->challengers as $name => $closure) {
             $chrono = new Chrono();
             $closure($this->container);
             $board->registerResult($id, $name, $chrono->getElapsedTime());
             $this->_cleanUpMemory();
         }
-        $this->_runEndRoutine();
+        $this->_runHook(self::ROUND_END);
+    }
+
+    /**
+     * Verify hook type
+     *
+     * @param int $type
+     * @return void
+     */
+    private function _verifyHooKType(int $type) : void
+    {
+        switch($type) {
+            case self::MATCH_BEGIN:
+            case self::MATCH_END:
+            case self::ROUND_BEGIN:
+            case self::ROUND_END:
+                break;
+            default:
+                throw new Exception('Invalid hook type specified');
+        }
     }
 
     /**
@@ -201,26 +229,6 @@ class Match implements MatchInterface
     private function _enableOutput() : void
     {
         ob_end_clean();
-    }
-
-    /**
-     * Run the begin routine
-     *
-     * @return void
-     */
-    private function _runBeginRoutine() : void
-    {
-        ($this->beginCallback)($this->container);
-    }
-
-    /**
-     * Run the end routine
-     *
-     * @return void
-     */
-    private function _runEndRoutine() : void
-    {
-        ($this->endCallback)($this->container);
     }
 
     /**
