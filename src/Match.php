@@ -122,7 +122,7 @@ class Match implements MatchInterface
     {
         $this->_verifyNumberOfChallengers();
         return $this->_runMatch(
-            $this->_getMaximumMatchTime()
+            $this->_computeMaximumMatchTime()
         );
     }
 
@@ -198,11 +198,11 @@ class Match implements MatchInterface
     }
 
     /**
-     * Get the maximum time allowed for a match
+     * Compute the maximum time allowed for a match
      *
      * @return int
      */
-    private function _getMaximumMatchTime() : int
+    private function _computeMaximumMatchTime() : int
     {
         if ($this->matchTime === null) {
             return count($this->challengers) * 1000;
