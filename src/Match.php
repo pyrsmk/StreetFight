@@ -134,13 +134,12 @@ class Match implements MatchInterface
      */
     private function _runMatch(int $maxTime) : BoardInterface
     {
-        $id = 0;
         $chrono = new Chrono();
         $board = new Board(array_keys($this->challengers));
         $this->_disableOutput();
         $this->_runHook(self::MATCH_BEGIN);
         do {
-            $this->_runRound(++$id, $board);
+            $this->_runRound($board);
         } while ($chrono->getElapsedTime(Chrono::MS) < $maxTime);
         $this->_runHook(self::MATCH_END);
         $this->_enableOutput();
@@ -150,12 +149,12 @@ class Match implements MatchInterface
     /**
      * Run a round
      *
-     * @param int $id
      * @param StreetFight\BoardInterface $board
      * @return void
      */
-    private function _runRound(int $id, BoardInterface $board) : void
+    private function _runRound(BoardInterface $board) : void
     {
+        $id = uniqid(rand(), true);
         $this->_runHook(self::ROUND_BEGIN);
         foreach ($this->challengers as $name => $closure) {
             $chrono = new Chrono();
