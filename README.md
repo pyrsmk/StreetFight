@@ -1,4 +1,4 @@
-StreetFight 6.0.0
+StreetFight 6.5.0
 =================
 
 StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
@@ -16,6 +16,31 @@ How does it work?
 -----------------
 
 StreetFight, contrary to many benchmarks we can found on the net, has been designed to have stable results at each run. Instead of iterate `n` times on each benchmark one after the other, it iterates `n` times on all benchmarks. It avoids caching mecanism side effects.
+
+
+
+/*
+    - hooks?
+    - ChallengerList : ajout?
+
+    $match = new Match(
+        new Rounds(
+            100,
+            new Round(
+                new Chrono(),
+                new ChallengerList([
+                    new Challenger('name', function() {}),
+                    new Challenger('name', function() {}),
+                    new Challenger('name', function() {})
+                ])
+            )
+        )
+    );
+    $report = new PercentageReport($match->fight());
+    var_dump($report->compute());
+*/
+
+
 
 Example/Use
 -----------
