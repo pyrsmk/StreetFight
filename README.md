@@ -18,28 +18,55 @@ How does it work?
 StreetFight, contrary to many benchmarks we can found on the net, has been designed to have stable results at each run. Instead of iterate `n` times on each benchmark one after the other, it iterates `n` times on all benchmarks. It avoids caching mecanism side effects.
 
 
-
+```php
 /*
-    - hooks?
-    - ChallengerList : ajout?
+    - BoardInterface#readResults() : array
+    - MatchBoard#__construct(array $roundBoards)
+    - RoundBoard#__construct(array $resultLines)
 
-    $match = new Match(
-        new Rounds(
-            100,
-            new Round(
-                new Chrono(),
-                new ChallengerList([
-                    new Challenger('name', function() {}),
-                    new Challenger('name', function() {}),
-                    new Challenger('name', function() {})
-                ])
-            )
-        )
-    );
-    $report = new PercentageReport($match->fight());
-    var_dump($report->compute());
+    - ResultLineInterface#which() : ChallengerInterface
+    - ResultLineInterface#time() : float
+    - ResultLine#__construct(ChallengerInterface $challenger, float $time)
+
+    - ChallengerListInterface#readList() : array
 */
+$match = StreetFight\ring(
+    'challengers' => [
+        'name' => function($container) {},
+        'name' => function($container) {},
+        'name' => function($container) {},
+    ],
+    'beginMatch' => function($container) {},
+    'endMatch' => function($container) {},
+    'beginRound' => function($container) {},
+    'endRound' => function($container) {}
+);
 
+$match = new StreetFight\Match(
+    new Chernozem\Container(),
+    new StreetFight\MatchBoard(),
+    new StreetFight\ChallengerList([
+        new StreetFight\Challenger('name', function($container) {}),
+        new StreetFight\Challenger('name', function($container) {}),
+        new StreetFight\Challenger('name', function($container) {}),
+    ]),
+    new StreetFight\Rounds(100, function($id, $challengerList) {
+        return new StreetFight\Round(
+            $id,
+            new StreetFight\RoundBoard(),
+            $challengerList,
+            new StreetFight\Chrono(),
+            new StreetFight\BeginRoutine(function($container) {}),
+            new StreetFight\EndRoutine(function($container) {})
+        );
+    }),
+    new StreetFight\BeginRoutine(function($container) {}),
+    new StreetFight\EndRoutine(function($container) {})
+);
+
+$report = new PercentageReport($match->fight());
+var_dump($report->compute());
+```
 
 
 Example/Use
