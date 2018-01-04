@@ -38,21 +38,47 @@ $match = new StreetFight\Match([
         ]);
     },
     'beginRoutine' => new StreetFight\Routine(function($container) {}),
-    'endRoutine' => new StreetFight\Routine(function($container) {})
+    'endRoutine' => new StreetFight\Routine(function($container) {}),
 ]);
 
-$match = StreetFight\createMatch(
+/*$arguments = (new Jeerz\Arguments([
     'challengers' => [
-        'name' => function($container) {},
-        'name' => function($container) {},
-        'name' => function($container) {},
+        'type' => 'array[Closure]',
     ],
-    'rounds' => 100,
-    'beginMatch' => function($container) {},
-    'endMatch' => function($container) {},
-    'beginRound' => function($container) {},
-    'endRound' => function($container) {}
-);
+    'rounds' => [
+        'type' => 'integer',
+        'optional' => true,
+        'default' => 100,
+    ],
+    'beginMatch' => [
+        'type' => 'Closure',
+        'optional' => true,
+        'default' => function(){},
+    ],
+    'endMatch' => [
+        'type' => 'Closure',
+        'optional' => true,
+        'default' => function () {},
+    ],
+    'beginRound' => [
+        'type' => 'Closure',
+        'optional' => true,
+        'default' => function () {},
+    ],
+    'endRound' => [
+        'type' => 'Closure',
+        'optional' => true,
+        'default' => function () {},
+    ],
+]))->extract($args);*/
+
+$match = new StreetFight\Match([
+    'challengerList' => new StreetFight\ChallengerList([
+        new StreetFight\Challenger('name', function($container) {}),
+        new StreetFight\Challenger('name', function($container) {}),
+        new StreetFight\Challenger('name', function($container) {}),
+    ]),
+]);
 
 var_dump(
     (
