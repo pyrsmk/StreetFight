@@ -26,7 +26,7 @@ $match = new StreetFight\Match([
     ]),
     'rounds' => 100,
     'round' => function($challengerList) {
-        return new StreetFight\Round(
+        return new StreetFight\Round([
             'id' => new StreetFight\Round\Id(),
             'board' => function(array $results) {
                 return new StreetFight\Board($results);
@@ -35,7 +35,7 @@ $match = new StreetFight\Match([
             'chrono' => new StreetFight\Chrono(),
             'beginRoutine' => new StreetFight\Routine(function($container) {}),
             'endRoutine' => new StreetFight\Routine(function($container) {})
-        );
+        ]);
     },
     'beginRoutine' => new StreetFight\Routine(function($container) {}),
     'endRoutine' => new StreetFight\Routine(function($container) {})
@@ -60,4 +60,14 @@ var_dump(
     )
     ->compute()
 );
+
+/*
+    Projet annexe : Jeerz
+    But : proposer des objets de base pour un écosystème en pur objet
+
+    Premier module : Jeerz\Options
+    But : gérer simplement des options passées en tableau associatif à un objet
+
+    Faut il gérer des objets pour les types? (string, boolean, int, ...)
+*/
 ```
