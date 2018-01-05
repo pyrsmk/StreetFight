@@ -16,9 +16,7 @@ Streetfight draft
 
 $match = new StreetFight\Match([
     'container' => new Chernozem\Container(),
-    'board' => function(array $results) {
-        return new StreetFight\Board($results);
-    },
+    'board' => 'StreetFight\Board',
     'challengerList' => new StreetFight\ChallengerList([
         new StreetFight\Challenger('name', function($container) {}),
         new StreetFight\Challenger('name', function($container) {}),
@@ -28,9 +26,7 @@ $match = new StreetFight\Match([
     'round' => function($challengerList) {
         return new StreetFight\Round([
             'id' => new StreetFight\Round\Id(),
-            'board' => function(array $results) {
-                return new StreetFight\Board($results);
-            },
+            'board' => 'StreetFight\Board',
             'challengerList' => $challengerList,
             'chrono' => new StreetFight\Chrono(),
             'beginRoutine' => new StreetFight\Routine(function($container) {}),
@@ -42,33 +38,53 @@ $match = new StreetFight\Match([
 ]);
 
 /*$arguments = (new Jeerz\Arguments([
-    'challengers' => [
-        'type' => 'array[Closure]',
+    'container' => [
+        'type' => 'Psr\Container\ContainerInterface',
+        'default' => function() {
+            return new Chernozem\Container();
+        },
+    ],
+    'board' => [
+        'type' => 'StreetFight\BoardInterface',
+        'default' => 'StreetFight\Board',
+    ],
+    'challengerList' => [
+        'type' => 'StreetFight\ChallengerList',
+        'required' => true,
     ],
     'rounds' => [
         'type' => 'integer',
-        'optional' => true,
         'default' => 100,
     ],
-    'beginMatch' => [
+    'round' => [
         'type' => 'Closure',
-        'optional' => true,
-        'default' => function(){},
+        'default' => function() {
+            return function($challengerList) {
+                return new StreetFight\Round([
+                    'id' => new StreetFight\Round\Id(),
+                    'board' => function(array $results) {
+                        return new StreetFight\Board($results);
+                    },
+                    'challengerList' => $challengerList,
+                    'chrono' => new StreetFight\Chrono(),
+                    'beginRoutine' => new StreetFight\Routine(function($container) {}),
+                    'endRoutine' => new StreetFight\Routine(function($container) {})
+                ]);
+            };
+        },
     ],
-    'endMatch' => [
+    'beginRoutine' => [
         'type' => 'Closure',
-        'optional' => true,
-        'default' => function () {},
+        'default' => function() {
+            return function(){};
+        },
     ],
-    'beginRound' => [
+    'endRoutine' => [
         'type' => 'Closure',
-        'optional' => true,
-        'default' => function () {},
+        'default' => function() {
+            return function(){};
+        },
     ],
-    'endRound' => [
-        'type' => 'Closure',
-        'optional' => true,
-        'default' => function () {},
     ],
 ]))->extract($args);*/
 
