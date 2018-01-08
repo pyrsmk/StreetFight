@@ -16,28 +16,35 @@ Streetfight draft
 
 $match = new StreetFight\Match([
     'container' => new Chernozem\Container(),
-    'board' => 'StreetFight\Board',
     'challengerList' => new StreetFight\ChallengerList([
         new StreetFight\Challenger('name', function($container) {}),
         new StreetFight\Challenger('name', function($container) {}),
         new StreetFight\Challenger('name', function($container) {}),
     ]),
     'rounds' => 100,
-    'round' => function($challengerList) {
-        return new StreetFight\Round([
-            'id' => new StreetFight\Round\Id(),
-            'board' => 'StreetFight\Board',
-            'challengerList' => $challengerList,
-            'chrono' => new StreetFight\Chrono(),
-            'beginRoutine' => new StreetFight\Routine(function($container) {}),
-            'endRoutine' => new StreetFight\Routine(function($container) {})
-        ]);
-    },
-    'beginRoutine' => new StreetFight\Routine(function($container) {}),
-    'endRoutine' => new StreetFight\Routine(function($container) {}),
+    'hooks' => [
+        new StreetFight\Hook\BeginMatch(function($container) {}),
+        new StreetFight\Hook\EndMatch(function($container) {}),
+        new StreetFight\Hook\BeginRound(function($container) {}),
+        new StreetFight\Hook\EndRound(function($container) {}),
+    ],
+    'boardClass' => 'StreetFight\Board',
+    'chronoClass' => 'StreetFight\Chrono',
+    'roundClass' => 'StreetFight\Round',
+    'roundIdClass' => 'StreetFight\Round\Id',
 ]);
 
-/*$arguments = (new Jeerz\Arguments([
+/*
+    StreetFight\Chrono::start()
+    StreetFight\Chrono::stop()
+    StreetFight\Chrono::read()
+
+    ou
+
+    (new StreetFight\Chrono($function(){}))->read();
+*/
+
+/*$arguments = (new ArgumentsValidator([
     'container' => [
         'type' => 'Psr\Container\ContainerInterface',
         'default' => function() {
@@ -67,24 +74,13 @@ $match = new StreetFight\Match([
                     },
                     'challengerList' => $challengerList,
                     'chrono' => new StreetFight\Chrono(),
-                    'beginRoutine' => new StreetFight\Routine(function($container) {}),
-                    'endRoutine' => new StreetFight\Routine(function($container) {})
                 ]);
             };
         },
     ],
-    'beginRoutine' => [
-        'type' => 'Closure',
-        'default' => function() {
-            return function(){};
-        },
-    ],
-    'endRoutine' => [
-        'type' => 'Closure',
-        'default' => function() {
-            return function(){};
-        },
-    ],
+    'hooks' => [
+        'type' => 'array[StreetFight\Hook\HookInterface]',
+        'default' => [],
     ],
 ]))->extract($args);*/
 
@@ -99,17 +95,86 @@ $match = new StreetFight\Match([
 var_dump(
     (
         new PercentageReport($match->fight())
-    )
-    ->compute()
+    )->compute()
 );
 
 /*
-    Projet annexe : Jeerz
-    But : proposer des objets de base pour un écosystème en pur objet
+    Old
+*/
 
-    Premier module : Jeerz\Options
-    But : gérer simplement des options passées en tableau associatif à un objet
+$c = $streetFight->getContainer();
+$c['filename'] = __DIR__ . '/test';
 
-    Faut il gérer des objets pour les types? (string, boolean, int, ...)
+$streetFight->begin(function ($c) {
+    touch($c['filename']);
+});
+
+$streetFight->end(function ($c) {
+    unlink($c['filename']);
+});
+
+$streetFight->add('file_put_contents (overwrite)', function ($c) {
+    file_put_contents($c['filename'], 'Le chat noir est dans le jardin.');
+});
+
+$streetFight->add('fwrite (overwrite)', function ($c) {
+    $f = fopen($c['filename'], 'w');
+    fwrite($f, 'Le chat noir est dans le jardin.');
+    fclose($f);
+});
+
+$streetFight->add('file_put_contents (append)', function ($c) {
+    file_put_contents($c['filename'], 'Le chat noir est dans le jardin.', FILE_APPEND);
+});
+
+$streetFight->add('fwrite (append)', function ($c) {
+    $f = fopen($c['filename'], 'a');
+    fwrite($f, 'Le chat noir est dans le jardin.');
+    fclose($f);
+});
+
+/*
+    New
+*/
+
+$streetFight = new StreetFight\Match([
+    'challengerList' => new StreetFight\ChallengerList([
+        new StreetFight\Challenger('file_put_contents (overwrite)', function ($c) {
+            file_put_contents($c['filename'], 'Le chat noir est dans le jardin.');
+        }),
+        new StreetFight\Challenger('fwrite (overwrite)', function ($c) {
+            $f = fopen($c['filename'], 'w');
+            fwrite($f, 'Le chat noir est dans le jardin.');
+            fclose($f);
+        }),
+        new StreetFight\Challenger('file_put_contents (append)', function ($c) {
+            file_put_contents($c['filename'], 'Le chat noir est dans le jardin.', FILE_APPEND);
+        }),
+        new StreetFight\Challenger('fwrite (append)', function ($c) {
+            $f = fopen($c['filename'], 'a');
+            fwrite($f, 'Le chat noir est dans le jardin.');
+            fclose($f);
+        }),
+    ]),
+    'hooks' => [
+        new StreetFight\Hook\BeginMatch(function($container) {
+            $c['filename'] = __DIR__ . '/test';
+        }),
+        new StreetFight\Hook\BeginRound(function($container) {
+            touch($c['filename']);
+        }),
+        new StreetFight\Hook\EndRound(function($container) {
+            unlink($c['filename']);
+        }),
+    ]
+]);
+
+/*
+    Faut il gérer des objets pour les types? (string, boolean, int, collection...)
+    Faut il gérer des objets pour les structures de contrôle?
+
+    Est-ce que ça revient pas à simplement déplacer la logique à un autre endroit?
+    Il est vrai que lors de l'instantiation de beaucoup d'objets, et dont certaines dépendances requièrent un IF,
+    alors il faut nécessairement instantier la dépendance en dehors de l'instantiation de l'objet parent.
 */
 ```
