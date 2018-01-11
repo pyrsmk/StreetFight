@@ -10,7 +10,7 @@ interface ChallengerInterface
      *
      * @return string
      */
-    public function sayMyName() : string;
+    public function tell() : string;
 
     /**
      * Run the callback

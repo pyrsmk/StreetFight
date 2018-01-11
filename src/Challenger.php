@@ -41,7 +41,7 @@ class Challenger implements ChallengerInterface
      *
      * @return string
      */
-    public function sayMyName() : string
+    public function tell() : string
     {
         return $this->name;
     }
