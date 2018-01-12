@@ -12,7 +12,7 @@ interface MatchInterface
     /**
      * Let's start the fight!
      *
-     * @return array
+     * @return BoardInterface
      */
-    public function fight() : array;
+    public function fight() : BoardInterface;
 }

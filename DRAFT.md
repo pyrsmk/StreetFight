@@ -6,6 +6,24 @@ Streetfight draft
     New
 ==================================================*/
 
+/*
+    OOPS 1.0
+    ========
+
+    CollectionInterface#__construct(array $list)
+    CollectionInterface#list() : array
+    CollectionInterface#iterate() : Generator
+    CollectionInterface#mix($value) : CollectionInterface
+
+    ControlStructureInterface#apply() : mixed
+
+    ActionCollection<-CollectionInterface
+    Action#__construct(string $name, mixed $dataIfTrue)
+
+    If#__construct(bool $condition, mixed $dataIfTrue, mixed $dataIfFalse)
+    Switch#__construct(bool $condition, ActionCollection $actions, mixed $defaultData)
+*/
+
 $results = (new PercentageReport(
     (new StreetFight\Match(
         new StreetFight\ChallengerList([
