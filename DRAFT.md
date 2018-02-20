@@ -2,30 +2,13 @@ Streetfight draft
 =================
 
 ```php
+
 /*==================================================
     New
 ==================================================*/
 
-/*
-    OOPS 1.0
-    ========
-
-    CollectionInterface#__construct(array $list)
-    CollectionInterface#list() : array
-    CollectionInterface#iterate() : Generator
-    CollectionInterface#mix($value) : CollectionInterface
-
-    ControlStructureInterface#apply() : mixed
-
-    ActionCollection<-CollectionInterface
-    Action#__construct(string $name, mixed $dataIfTrue)
-
-    If#__construct(bool $condition, mixed $dataIfTrue, mixed $dataIfFalse)
-    Switch#__construct(bool $condition, ActionCollection $actions, mixed $defaultData)
-*/
-
 $results = (new PercentageReport(
-    (new StreetFight\Match(
+    StreetFight\createMatch(
         new StreetFight\ChallengerList([
             new StreetFight\Challenger('file_put_contents (overwrite)', function ($filename) {
                 file_put_contents($filename, 'Le chat noir est dans le jardin.');
@@ -55,7 +38,7 @@ $results = (new PercentageReport(
                 unlink($filename);
             }),
         ])
-    ]))->fight(100)
+    ])->fight(100)
 ))->compute();
 
 /*==================================================
