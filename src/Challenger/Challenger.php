@@ -2,8 +2,7 @@
 
 namespace StreetFight;
 
-use Closure;
-use Psr\Container\ContainerInterface;
+use Illuminator\TimedTask;
 
 /**
  * A challenger
@@ -20,20 +19,20 @@ class Challenger implements ChallengerInterface
     /**
      * The callback to run
      *
-     * @var Closure
+     * @var callable
      */
-    private $callback;
+    private $task;
 
     /**
      * Constructor
      *
      * @param string $name
-     * @param Closure $callback
+     * @param callable $callback
      */
-    public function __construct(string $name, Closure $callback)
+    public function __construct(string $name, callable $callback)
     {
         $this->name = $name;
-        $this->callback = $callback;
+        $this->task = new TimedTask($callback);
     }
 
     /**
@@ -41,19 +40,18 @@ class Challenger implements ChallengerInterface
      *
      * @return string
      */
-    public function tell() : string
+    public function name(): string
     {
         return $this->name;
     }
 
     /**
-     * Run the callback
+     * Run the callback and return the elapsed time
      *
-     * @param Psr\Container\ContainerInterface $container
-     * @return void
+     * @return float
      */
-    public function kick(ContainerInterface $container) : void
+    public function kick(): float
     {
-        ($this->callback)($container);
+        return $this->task->read();
     }
 }

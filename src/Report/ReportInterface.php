@@ -1,6 +1,6 @@
 <?php
 
-namespace StreetFight;
+namespace StreetFight\Report;
 
 /**
  * Performance report interface
@@ -12,5 +12,5 @@ interface ReportInterface
      *
      * @return array
      */
-    public function getPerformance() : array;
+    public function compute() : array;
 }

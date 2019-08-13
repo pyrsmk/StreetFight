@@ -9,11 +9,12 @@
     "authors": [{
         "name": "Aurélien Delogu",
         "email": "dev@dreamysource.fr",
-        "homepage": "http://dreamysource.io/project/streetfight"
+        "homepage": "https://github.com/pyrsmk/StreetFight"
     }],
     "require": {
         "php": ">=7.2.0",
-        "pyrsmk/illuminator": "^2.0"
+        "pyrsmk/illuminator": "^3.0",
+        "pyrsmk/funktions": "^0.4"
     },
     "autoload": {
         "psr-4" : {

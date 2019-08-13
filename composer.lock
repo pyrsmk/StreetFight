@@ -1,0 +1,112 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
+        "This file is @generated automatically"
+    ],
+    "content-hash": "8a91749d6c0b9d3c5a54706b084bb9a6",
+    "packages": [
+        {
+            "name": "pyrsmk/funktions",
+            "version": "0.4.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pyrsmk/Funktions.git",
+                "reference": "5ac4acc347b6ec5fea3ff0bb846839908f7dfaa7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/5ac4acc347b6ec5fea3ff0bb846839908f7dfaa7",
+                "reference": "5ac4acc347b6ec5fea3ff0bb846839908f7dfaa7",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-fileinfo": "*",
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "files": [
+                    "src/array.php",
+                    "src/color.php",
+                    "src/system.php"
+                ]
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aurélien Delogu",
+                    "email": "dev@dreamysource.fr",
+                    "homepage": "https://github.com/pyrsmk/Funktions"
+                }
+            ],
+            "description": "Several useful PHP functions",
+            "keywords": [
+                "array",
+                "color",
+                "debug",
+                "function",
+                "system"
+            ],
+            "time": "2019-08-13T15:28:20+00:00"
+        },
+        {
+            "name": "pyrsmk/illuminator",
+            "version": "3.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pyrsmk/Illuminator.git",
+                "reference": "894ca29b7e069dd2ccd7ed8d01617f646b9278a3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pyrsmk/Illuminator/zipball/894ca29b7e069dd2ccd7ed8d01617f646b9278a3",
+                "reference": "894ca29b7e069dd2ccd7ed8d01617f646b9278a3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=7.2.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Illuminator\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aurélien Delogu",
+                    "email": "dev@dreamysource.fr",
+                    "homepage": "https://github.com/pyrsmk/Illuminator"
+                }
+            ],
+            "description": "Simple chronometers",
+            "keywords": [
+                "chrono",
+                "chronometer",
+                "stopwatch",
+                "time",
+                "timer"
+            ],
+            "time": "2019-08-13T15:27:25+00:00"
+        }
+    ],
+    "packages-dev": [],
+    "aliases": [],
+    "minimum-stability": "stable",
+    "stability-flags": [],
+    "prefer-stable": false,
+    "prefer-lowest": false,
+    "platform": {
+        "php": ">=7.2.0"
+    },
+    "platform-dev": []
+}
