@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "8a91749d6c0b9d3c5a54706b084bb9a6",
+    "content-hash": "9afa8a28b38b62ed8ae113ac0eca1d49",
     "packages": [
         {
             "name": "pyrsmk/funktions",
-            "version": "0.4.1",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pyrsmk/Funktions.git",
-                "reference": "5ac4acc347b6ec5fea3ff0bb846839908f7dfaa7"
+                "reference": "2ff5657c9abedc54aa6d06fcbdbfddbbda89cb93"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/5ac4acc347b6ec5fea3ff0bb846839908f7dfaa7",
-                "reference": "5ac4acc347b6ec5fea3ff0bb846839908f7dfaa7",
+                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/2ff5657c9abedc54aa6d06fcbdbfddbbda89cb93",
+                "reference": "2ff5657c9abedc54aa6d06fcbdbfddbbda89cb93",
                 "shasum": ""
             },
             "require": {
@@ -52,7 +52,7 @@
                 "function",
                 "system"
             ],
-            "time": "2019-08-13T15:28:20+00:00"
+            "time": "2019-08-14T08:18:47+00:00"
         },
         {
             "name": "pyrsmk/illuminator",

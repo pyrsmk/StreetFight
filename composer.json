@@ -13,8 +13,8 @@
     }],
     "require": {
         "php": ">=7.2.0",
-        "pyrsmk/illuminator": "^3.0",
-        "pyrsmk/funktions": "^0.4"
+        "pyrsmk/illuminator": "^3",
+        "pyrsmk/funktions": "^0"
     },
     "autoload": {
         "psr-4" : {

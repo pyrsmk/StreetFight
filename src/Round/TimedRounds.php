@@ -9,6 +9,7 @@ use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Hook\HookInterface;
 use StreetFight\Board\BoardInterface;
 use StreetFight\Board\Board;
+use function Funktions\above;
 
 /**
  * Run the rounds
@@ -58,7 +59,7 @@ final class Rounds implements RoundsInterface
         HookInterface $afterHook
     )
     {
-        $this->time = $time;
+        $this->time = above($time, 0);
         $this->challengerList = $challengerList;
         $this->beforeHook = $beforeHook;
         $this->afterHook = $afterHook;
