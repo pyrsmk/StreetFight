@@ -1,120 +1,162 @@
-StreetFight 6.5.0
-=================
+# StreetFight
 
-StreetFight is a tiny benchmarking tool aiming to quickly know what code is better in performance from another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
+StreetFight is a benchmarking tool aiming to quickly know what code have better performance against another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
 
-Install
--------
+## Install
 
-StreetFight requires PHP 7.1.
+StreetFight requires PHP 7.2.
 
 ```
 composer require pyrsmk/streetfight
 ```
 
-How does it work?
------------------
-
-StreetFight, contrary to many benchmarks we can found on the net, has been designed to have stable results at each run. Instead of iterate `n` times on each benchmark one after the other, it iterates `n` times on all benchmarks. It avoids caching mecanism side effects.
-
-Example/Use
------------
+## Use
 
 ```php
-$match = new StreetFight\Match();
+$match = new StreetFight\Facade(
+    StreetFight\Facade::PERCENTAGE_REPORT
+);
 
-$match->add('!isset()', function () {
-    !isset($undefined_var);
+$match->add('Pre-increment', function () {
+    $i = 0;
+    ++$i;
 });
 
-$match->add('isset() === false', function () {
-    isset($undefined_var) === false;
+$match->add('Post-increment', function () {
+    $i = 0;
+    $i++;
 });
 
-// Start the fight and return the complete results board
-$board = $match->fight();
-
-$report = new StreetFight\Report($board);
-$report->getPerformance();
+var_dump($match->fight());
 /*
-    Will return, in percent (the less the better) :
-
     [
-        'isset() === false' => 100,
-        '!isset()' => 97.19
+        'Post-increment' => 100,
+        'Pre-increment' => 98.84
     ]
 */
 ```
 
-Callbacks
----------
+## Set some hooks
 
-If you need to run some specific routines before and after each iteration, you can do :
+If you need to run some specific routines, you can use some hooks:
 
 ```php
-$match->begin(function ($container) {
-    // some tasks
+$match->begin(function () {
+    // Run at the very beginning
 });
 
-$match->end(function ($container) {
-    // some other tasks
+$match->before(function () {
+    // Run before each task, at each iteration
+});
+
+$match->after(function () {
+    // Run after each task, at each iteration
+});
+
+$match->end(function () {
+    // Run at the very end
 });
 ```
 
-For ease of use, a [container](https://github.com/pyrsmk/Chernozem) is passed to each callback so you can register values/services that you'll pass to your benchmarks. Per example :
+Here's an example:
 
 ```php
-$container = $match->getContainer();
-$container['filename'] = __DIR__ . '/test.txt';
-
-$streetFight->begin(function ($container) {
-    touch($container['filename']);
+$match->before(function () {
+    touch('foo.txt');
 });
 
-$streetFight->end(function ($container) {
-    unlink($container['filename']);
+$match->after(function () {
+    unlink('foo.txt');
 });
 
-$streetFight->add('file_put_contents (overwrite)', function ($container) {
-    file_put_contents($container['filename'], 'contents');
+$match->add('file_put_contents (overwrite)', function () {
+    file_put_contents('foo.txt', 'bar');
 });
 
-$streetFight->add('fwrite (overwrite)', function ($container) {
-    $f = fopen($container['filename'], 'w');
-    fwrite($f, 'contents');
+$match->add('fwrite (overwrite)', function () {
+    $f = fopen('foo.txt', 'w');
+    fwrite($f, 'bar');
+    fclose($f);
+});
+
+$match->add('file_put_contents (append)', function () {
+    file_put_contents('foo.txt', 'bar', FILE_APPEND);
+});
+
+$match->add('fwrite (append)', function () {
+    $f = fopen('foo.txt', 'a');
+    fwrite($f, 'bar');
     fclose($f);
 });
 ```
 
-Notes
------
+## Defining data
 
-By default, the match will run for a total of `1000ms` for each test. If needed, when an test iteration is taking much more than `1000ms` You can force a match time with :
-
-```php
-// Run for 750ms
-$match = new StreetFight\Match(750);
-```
-
-If needed, you can retrieve the results report in different units than percentages with :
+As you can see from the above example, the same data is used across all tasks. Furthermore, we could need to generate random data at each iteration. But since mutability makes it really difficult for StreetFight to keep track on the data, and passing it into objects complicates the API, it has been decided to define it outside of StreetFight itself. So, here's how you would use arbitrary data, based on the previous example:
 
 ```php
-$report = new StreetFight\Report($board);
-$report->getPerformance(StreetFight\Report::MS);
+$data = [
+    'filename' => 'foo.txt',
+    'content' => 'bar'
+];
 
-/*
-    Available constants :
+$match->before(function () use ($data) {
+    touch($data['filename']);
+});
 
-    - StreetFight\Report::PERCENTAGE
-    - StreetFight\Report::SECONDS
-    - StreetFight\Report::MILLISECONDS
-    - StreetFight\Report::MICROSECONDS
-*/
+$match->after(function () use ($data) {
+    unlink($data['filename']);
+});
+
+$match->add('file_put_contents (overwrite)', function () use ($data) {
+    file_put_contents($data['filename'], $data['content']);
+});
+
+$match->add('fwrite (overwrite)', function () use ($data) {
+    $f = fopen($data['filename'], 'w');
+    fwrite($f, $data['content']);
+    fclose($f);
+});
+
+$match->add('file_put_contents (append)', function () use ($data) {
+    file_put_contents($data['filename'], $data['content'], FILE_APPEND);
+});
+
+$match->add('fwrite (append)', function () use ($data) {
+    $f = fopen($data['filename'], 'a');
+    fwrite($f, $data['content']);
+    fclose($f);
+});
 ```
 
-Depending on what code you're benchmarking, execution time can exceed the `max_execution_time` directive. Just use `set_time_limit(0)` in that case.
+## Reports
 
-License
--------
+There are different report formats available as constants in the `StreetFight\Facade` object:
+
+- `SECONDS_REPORT` (default)
+- `ROUNDEDSECONDS_REPORT`
+- `MICROSECONDS_REPORT`
+- `MILLISECONDS_REPORT`
+- `PERCENTAGE_REPORT`
+
+```php
+$match = new StreetFight\Facade(
+    StreetFight::ROUNDEDSECONDS_REPORT
+);
+```
+
+## Running time
+
+By default, the maximum time of the global benchmark will be automatically computed so the results will be more accurate. But you can specify an arbitrary time (in milliseconds) in the `fight()` method:
+
+```php
+$match->fight(2000);
+```
+
+## Side note
+
+Depending on what code you're benchmarking, execution time can exceed the `max_execution_time` directive of PHP. Just set `set_time_limit(0)` and you'll be all good.
+
+## License
 
 [MIT](http://dreamysource.mit-license.org).
