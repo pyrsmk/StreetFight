@@ -2,17 +2,17 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Round;
+namespace StreetFight\Match;
 
 use StreetFight\Board\BoardInterface;
 
 /**
- * Rounds interface
+ * Match interface
  */
-interface RoundsInterface
+interface MatchInterface
 {
     /**
-     * Run the rounds
+     * Run the match
      *
      * @return BoardInterface
      */

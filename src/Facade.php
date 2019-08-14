@@ -8,7 +8,10 @@ use StreetFight\Challenger\GarbageCollectedChallenger;
 use StreetFight\Challenger\ChallengerList;
 use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Hook\Hook;
+use StreetFight\Hook\HookInterface;
 use StreetFight\Hook\NullHook;
+use StreetFight\Match\AutoTimedMatch;
+use StreetFight\Match\TimedMatch;
 use StreetFight\Report\Report;
 use StreetFight\Report\RoundedSecondsReport;
 use StreetFight\Report\MicrosecondsReport;
@@ -148,16 +151,16 @@ class Facade implements FacadeInterface
      */
     public function fight(int $time = -1): array
     {
-        // Create Rounds object
+        // Create Match object
         if ($time !== -1) {
-            $rounds = new TimedRounds(
+            $match = new TimedMatch(
                 $time,
                 $this->challengerList,
                 $this->beforeHook,
                 $this->afterHook
             );
         } else {
-            $rounds = new AutoTimedRounds(
+            $match = new AutoTimedMatch(
                 $this->challengerList,
                 $this->beforeHook,
                 $this->afterHook
@@ -165,7 +168,7 @@ class Facade implements FacadeInterface
         }
         // Run the benchmark
         $this->beginHook->run();
-        $board = $rounds->fight();
+        $board = $match->fight();
         $this->endHook->run();
         // Create Report object
         $report = new SortedReport(

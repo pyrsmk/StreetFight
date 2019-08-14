@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Round;
+namespace StreetFight\Match;
 
 use Illuminator\Chrono;
 use StreetFight\Challenger\ChallengerListInterface;
@@ -12,9 +12,9 @@ use StreetFight\Board\Board;
 use function Funktions\above;
 
 /**
- * Run the rounds
+ * A match with a maximum time
  */
-final class Rounds implements RoundsInterface
+final class TimedMatch implements RoundsInterface
 {
     /**
      * The maximum time
@@ -66,7 +66,7 @@ final class Rounds implements RoundsInterface
     }
 
     /**
-     * Run the rounds
+     * Run the match
      *
      * @return BoardInterface
      */

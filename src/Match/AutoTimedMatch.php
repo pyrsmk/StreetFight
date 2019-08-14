@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Round;
+namespace StreetFight\Match;
 
 use Illuminator\Chrono;
 use StreetFight\Challenger\ChallengerListInterface;
@@ -11,9 +11,9 @@ use StreetFight\Board\BoardInterface;
 use StreetFight\Board\Board;
 
 /**
- * Run the rounds
+ * A match with an auto-computed maximum time
  */
-final class Rounds implements RoundsInterface
+final class AutoTimedMatch implements MatchInterface
 {
     /**
      * Challenger list
@@ -55,7 +55,7 @@ final class Rounds implements RoundsInterface
     }
 
     /**
-     * Run the rounds
+     * Run the match
      *
      * @return BoardInterface
      */

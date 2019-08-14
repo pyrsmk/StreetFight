@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Round;
+namespace StreetFight\Match;
 
 use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Hook\HookInterface;
@@ -11,9 +11,9 @@ use StreetFight\Board\Board;
 use function Funktions\above;
 
 /**
- * Run the rounds
+ * A street fight match
  */
-final class Rounds implements RoundsInterface
+final class Match implements MatchInterface
 {
     /**
      * The number of rounds
@@ -65,7 +65,7 @@ final class Rounds implements RoundsInterface
     }
 
     /**
-     * Run the rounds
+     * Run the match
      *
      * @return BoardInterface
      */
