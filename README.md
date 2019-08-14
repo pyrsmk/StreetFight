@@ -90,9 +90,9 @@ $match->add('fwrite (append)', function () {
 });
 ```
 
-## Defining data
+## Passing some data to tasks
 
-As you can see from the above example, the same data is used across all tasks. Furthermore, we could need to generate random data at each iteration. But since mutability makes it really difficult for StreetFight to keep track on the data, and passing it into objects complicates the API, it has been decided to define it outside of StreetFight itself. So, here's how you would use arbitrary data, based on the previous example:
+As you can see from the above example, the same data is used across all tasks. Furthermore, we could need to generate random data at each iteration. But since mutability makes it really difficult for StreetFight to keep track on the data (and passing it into objects complicates the API), it has been decided to define it outside of StreetFight itself in a procedural way. So, here's how you would use arbitrary data, based on the previous example:
 
 ```php
 $data = [
@@ -147,9 +147,10 @@ $match = new StreetFight\Facade(
 
 ## Running time
 
-By default, the maximum time of the global benchmark will be automatically computed so the results will be more accurate. But you can specify an arbitrary time (in milliseconds) in the `fight()` method:
+By default, the maximum time of the global benchmark will be automatically computed so the results will be more accurate. But you can specify an arbitrary time (in milliseconds) in the `fight()` method. Please note that if a task takes 10 seconds to execute, defining the maximum time to 1 second won't decrease the real time: the whole iteration will be completed before exiting the benchmark routine.
 
 ```php
+// The benchmark will took AT LEAST 2 seconds
 $match->fight(2000);
 ```
 
