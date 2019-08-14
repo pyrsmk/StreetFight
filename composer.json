@@ -1,6 +1,6 @@
 {
     "name": "pyrsmk/streetfight",
-    "description": "A micro benchmarking tool",
+    "description": "A simple benchmarking tool",
     "keywords": [
         "micro",
         "benchmark"
