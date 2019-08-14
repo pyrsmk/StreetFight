@@ -12,10 +12,10 @@ interface ChallengerListInterface
     /**
      * Merge additional challengers to a new collection
      *
-     * @param Challenger[] $challengers
+     * @param ChallengerInterface[] $challengers
      * @return self
      */
-    public function with(Challenger ...$challengers): self;
+    public function with(ChallengerInterface ...$challengers): self;
 
     /**
      * Get the challengers

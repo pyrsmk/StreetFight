@@ -1,6 +1,6 @@
 <?php
 
-namespace StreetFight;
+namespace StreetFight\Challenger;
 
 use Illuminator\TimedTask;
 

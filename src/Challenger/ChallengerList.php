@@ -15,16 +15,16 @@ final class ChallengerList implements ChallengerListInterface
     /**
      * The challengers
      *
-     * @var Challenger[]
+     * @var ChallengerInterface[]
      */
     private $challengers;
 
     /**
      * Constructor
      *
-     * @param Challenger[] $challengers
+     * @param ChallengerInterface[] $challengers
      */
-    public function __construct(Challenger ...$challengers = [])
+    public function __construct(ChallengerInterface ...$challengers = [])
     {
         $this->challengers = $challengers;
     }
@@ -32,10 +32,10 @@ final class ChallengerList implements ChallengerListInterface
     /**
      * Merge additional challengers to a new collection
      *
-     * @param Challenger[] $challengers
+     * @param ChallengerInterface[] $challengers
      * @return self
      */
-    public function with(Challenger ...$challengers): self
+    public function with(ChallengerInterface ...$challengers): self
     {
         return new self(
             ...$this->challengers,

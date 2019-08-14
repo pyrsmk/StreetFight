@@ -1,6 +1,6 @@
 <?php
 
-namespace StreetFight;
+namespace StreetFight\Challenger;
 
 /**
  * Run a challenger and clean up memory
@@ -10,16 +10,16 @@ class GarbageCollectedChallenger implements ChallengerInterface
     /**
      * The challenger
      *
-     * @var Challenger
+     * @var ChallengerInterface
      */
     private $challenger;
 
     /**
      * Constructor
      *
-     * @param Challenger $challenger
+     * @param ChallengerInterface $challenger
      */
-    public function __construct(Challenger $challenger)
+    public function __construct(ChallengerInterface $challenger)
     {
         $this->challenger = $challenger;
     }
