@@ -45,8 +45,8 @@ interface FacadeInterface
     /**
      * Let's start the fight!
      *
-     * @param integer|null $time
+     * @param integer $time
      * @return BoardInterface
      */
-    public function fight(?int $time = null): BoardInterface;
+    public function fight(int $time = -1): BoardInterface;
 }

@@ -130,12 +130,12 @@ class Facade implements FacadeInterface
     /**
      * Let's start the fight!
      *
-     * @param integer|null $time
+     * @param integer $time
      * @return BoardInterface
      */
-    public function fight(?int $time = null): BoardInterface
+    public function fight(int $time = -1): BoardInterface
     {
-        if ($time !== null) {
+        if ($time !== -1) {
             $rounds = new TimedRounds(
                 $time,
                 $this->challengerList,
