@@ -2,6 +2,8 @@
 
 namespace StreetFight\Report;
 
+use function Funktions\map;
+
 /**
  * A performance report in percentage
  */

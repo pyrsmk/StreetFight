@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace StreetFight\Challenger;
 
 use Generator;
+use function Funktions\array_to_generator;
 
 /**
  * Challenger list
