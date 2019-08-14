@@ -6,9 +6,11 @@ namespace StreetFight\Round;
 
 use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Hook\HookInterface;
-use StreetFight\Board\RoundBoardInterface;
-use StreetFight\Board\RoundBoard;
+use StreetFight\Hook\NullHook;
+use StreetFight\Board\BoardInterface;
+use StreetFight\Board\Board;
 use StreetFight\Board\Result;
+use function Funktions\loop;
 
 /**
  * Run the round
@@ -40,38 +42,33 @@ final class Round implements RoundInterface
      * Constructor
      *
      * @param ChallengerListInterface $challengerList
-     * @param HookInterface $beforeHook
-     * @param HookInterface $afterHook
+     * @param HookInterface|null $beforeHook
+     * @param HookInterface|null $afterHook
      */
     public function __construct(
         ChallengerListInterface $challengerList,
-        HookInterface $beforeHook,
-        HookInterface $afterHook
+        ?HookInterface $beforeHook = null,
+        ?HookInterface $afterHook = null
     )
     {
         $this->challengerList = $challengerList;
-        $this->beforeHook = $beforeHook;
-        $this->afterHook = $afterHook;
+        $this->beforeHook = $beforeHook ?? new NullHook();
+        $this->afterHook = $afterHook ?? new NullHook();
     }
 
     /**
      * Run the round
      *
-     * @return RoundBoardInterface
+     * @return BoardInterface
      */
-    public function fight(): RoundBoardInterface
+    public function fight(): BoardInterface
     {
-        $board = new RoundBoard();
-        foreach ($this->challengerList->items() as $challenger) {
-            $this->beforeHook->run();
-            $board->with(
-                new Result(
-                    $challenger,
-                    $challenger->kick()
-                )
-            );
-            $this->afterHook->run();
-        }
-        return $this->board;
+        return new Board(
+            ...loop($this->challengerList->items(), function ($challenger) {
+                $this->beforeHook->run();
+                yield $challenger->kick();
+                $this->afterHook->run();
+            })
+        );
     }
 }

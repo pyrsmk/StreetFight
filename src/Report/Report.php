@@ -2,8 +2,8 @@
 
 namespace StreetFight\Report;
 
-use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Board\BoardInterface;
+use StreetFight\Match\MatchInterface;
 
 /**
  * A performance report in seconds
@@ -11,29 +11,20 @@ use StreetFight\Board\BoardInterface;
 final class Report implements ReportInterface
 {
     /**
-     * The challengers
+     * A match
      *
-     * @var ChallengerListInterface
+     * @var MatchInterface
      */
-    private $challengerList;
-
-    /**
-     * The results board
-     *
-     * @var BoardInterface
-     */
-    private $board;
+    private $match;
 
     /**
      * Constructor
      *
-     * @param ChallengerListInterface $challengerList
-     * @param BoardInterface $board
+     * @param MatchInterface $match
      */
-    public function __construct(ChallengerListInterface $challengerList, BoardInterface $board)
+    public function __construct(MatchInterface $match)
     {
-        $this->challengerList = $challengerList;
-        $this->board = $board;
+        $this->match = $match;
     }
 
     /**
@@ -43,16 +34,15 @@ final class Report implements ReportInterface
      */
     public function compute() : array
     {
-        $results = [];
-        foreach($this->challengerList->items() as $challenger) {
-            $results[$challenger->name] = array_reduce(
-                $this->boards->filter($challenger),
-                function ($time, $result) {
-                    return $time + $result->time();
-                },
-                0
-            );
-        }
-        return $results;
+        return array_reduce(
+            $this->match->fight(),
+            function (array $final, BoardInterface $board) {
+                foreach ($board->results() as $result) {
+                    $final = $result->addTo($final);
+                }
+                return $final;
+            },
+            []
+        );
     }
 }

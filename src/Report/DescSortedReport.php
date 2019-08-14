@@ -3,9 +3,9 @@
 namespace StreetFight\Report;
 
 /**
- * A sorted performance report
+ * A descending sorted performance report
  */
-final class SortedReport implements ReportInterface
+final class DescSortedReport implements ReportInterface
 {
     /**
      * The original report

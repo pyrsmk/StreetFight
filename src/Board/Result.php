@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace StreetFight\Board;
 
-use StreetFight\Challenger\ChallengerInterface;
+use function Funktions\condition;
 
 /**
  * Result
@@ -12,11 +12,11 @@ use StreetFight\Challenger\ChallengerInterface;
 final class Result implements ResultInterface
 {
     /**
-     * The challenger
+     * The challenger's name
      *
-     * @var ChallengerInterface
+     * @var string
      */
-    private $challenger;
+    private $name;
 
     /**
      * The time
@@ -28,32 +28,30 @@ final class Result implements ResultInterface
     /**
      * Constructor
      *
-     * @param ChallengerInterface $challenger
+     * @param string $name
      * @param float $time
      */
-    public function __construct(ChallengerInterface $challenger, float $time)
+    public function __construct(string $name, float $time)
     {
-        $this->challenger = $challenger;
+        $this->name = $name;
         $this->time = $time;
     }
 
     /**
-     * Get the challenger
+     * Add the time to an array of results
      *
-     * @return ChallengerInterface
+     * @return array
      */
-    public function challenger(): ChallengerInterface
+    public function addTo(array $results): array
     {
-        return $this->challenger();
-    }
-
-    /**
-     * Get the time
-     *
-     * @return float
-     */
-    public function time(): float
-    {
-        return $this->time();
+        return condition(
+            !isset($results[$this->name]),
+            function () {
+                return $this->time;
+            },
+            function () use ($results) {
+                return $results[$this->name] + $this->time;
+            }
+        );
     }
 }

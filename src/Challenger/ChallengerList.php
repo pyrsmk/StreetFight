@@ -30,20 +30,6 @@ final class ChallengerList implements ChallengerListInterface
     }
 
     /**
-     * Merge additional challengers to a new collection
-     *
-     * @param ChallengerInterface[] $challengers
-     * @return self
-     */
-    public function with(ChallengerInterface ...$challengers): self
-    {
-        return new self(
-            ...$this->challengers,
-            ...$challengers
-        );
-    }
-
-    /**
      * Get the challengers
      *
      * @return Generator

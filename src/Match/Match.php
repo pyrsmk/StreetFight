@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace StreetFight\Match;
 
-use StreetFight\Challenger\ChallengerListInterface;
-use StreetFight\Hook\HookInterface;
-use StreetFight\Board\BoardInterface;
-use StreetFight\Board\Board;
+use StreetFight\Round\RoundInterface;
 use function Funktions\above;
+use function Funktions\loop;
+use function Funktions\clean;
 
 /**
  * A street fight match
@@ -23,65 +22,35 @@ final class Match implements MatchInterface
     private $rounds;
 
     /**
-     * Challenger list
+     * The round
      *
-     * @var ChallengerListInterface
+     * @var RoundInterface
      */
-    private $challengerList;
-
-    /**
-     * BEFORE hook
-     *
-     * @var HookInterface
-     */
-    private $beforeHook;
-
-    /**
-     * AFTER hook
-     *
-     * @var HookInterface
-     */
-    private $afterHook;
+    private $round;
 
     /**
      * Constructor
      *
      * @param int $rounds
-     * @param ChallengerListInterface $challengerList
-     * @param HookInterface $beforeHook
-     * @param HookInterface $afterHook
+     * @param RoundInterface $round
      */
-    public function __construct(
-        int $rounds,
-        ChallengerListInterface $challengerList,
-        HookInterface $beforeHook,
-        HookInterface $afterHook
-    )
+    public function __construct(int $rounds, RoundInterface $round)
     {
         $this->rounds = above($rounds, 1);
-        $this->challengerList = $challengerList;
-        $this->beforeHook = $beforeHook;
-        $this->afterHook = $afterHook;
+        $this->round = $round;
     }
 
     /**
      * Run the match
      *
-     * @return BoardInterface
+     * @return array
      */
-    public function fight(): BoardInterface
+    public function fight(): array
     {
-        $board = new Board();
-        foreach (range(1, $this->rounds) as $i) {
-            $round = new Round(
-                $this->challengerList,
-                $this->beforeHook,
-                $this->afterHook
-            );
-            $board = $board->with(
-                $round->fight()
-            );
-        }
-        return $board;
+        return loop(range(1, $this->rounds), function () {
+            yield clean(function () {
+                return $this->round->fight();
+            });
+        });
     }
 }

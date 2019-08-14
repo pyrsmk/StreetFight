@@ -4,19 +4,13 @@ declare(strict_types=1);
 
 namespace StreetFight\Challenger;
 
+use Generator;
+
 /**
  * Challenger list interface
  */
 interface ChallengerListInterface
 {
-    /**
-     * Merge additional challengers to a new collection
-     *
-     * @param ChallengerInterface[] $challengers
-     * @return self
-     */
-    public function with(ChallengerInterface ...$challengers): self;
-
     /**
      * Get the challengers
      *

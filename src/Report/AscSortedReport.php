@@ -2,26 +2,24 @@
 
 namespace StreetFight\Report;
 
-use function Funktions\map;
-
 /**
- * A performance report in milliseconds
+ * A ascending sorted performance report
  */
-final class MillisecondsReport implements ReportInterface
+final class AscSortedReport implements ReportInterface
 {
     /**
      * The original report
      *
-     * @var Report
+     * @var ReportInterface
      */
     private $report;
 
     /**
      * Constructor
      *
-     * @param Report $report
+     * @param ReportInterface $report
      */
-    public function __construct(Report $report)
+    public function __construct(ReportInterface $report)
     {
         $this->report = $report;
     }
@@ -33,8 +31,8 @@ final class MillisecondsReport implements ReportInterface
      */
     public function compute() : array
     {
-        return map($this->report->compute(), function ($time) {
-            return round($time * 10 ** 3, 2);
-        });
+        return array_asort(
+            $this->report->compute()
+        );
     }
 }

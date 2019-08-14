@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "pyrsmk/funktions",
-            "version": "0.5.0",
+            "version": "0.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pyrsmk/Funktions.git",
-                "reference": "2ff5657c9abedc54aa6d06fcbdbfddbbda89cb93"
+                "reference": "2c05738d1f9638fb6992d1e9a36d361ca050026b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/2ff5657c9abedc54aa6d06fcbdbfddbbda89cb93",
-                "reference": "2ff5657c9abedc54aa6d06fcbdbfddbbda89cb93",
+                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/2c05738d1f9638fb6992d1e9a36d361ca050026b",
+                "reference": "2c05738d1f9638fb6992d1e9a36d361ca050026b",
                 "shasum": ""
             },
             "require": {
@@ -30,6 +30,10 @@
                 "files": [
                     "src/array.php",
                     "src/color.php",
+                    "src/instruction.php",
+                    "src/number.php",
+                    "src/regex.php",
+                    "src/string.php",
                     "src/system.php"
                 ]
             },
@@ -44,15 +48,18 @@
                     "homepage": "https://github.com/pyrsmk/Funktions"
                 }
             ],
-            "description": "Several useful PHP functions",
+            "description": "Enhance PHP functions with a salt of functional programming",
             "keywords": [
                 "array",
                 "color",
-                "debug",
-                "function",
-                "system"
+                "filesystem",
+                "functional",
+                "mimetype",
+                "number",
+                "regex",
+                "string"
             ],
-            "time": "2019-08-14T08:18:47+00:00"
+            "time": "2019-08-15T09:18:34+00:00"
         },
         {
             "name": "pyrsmk/illuminator",

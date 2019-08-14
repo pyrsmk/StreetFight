@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace StreetFight\Match;
 
-use StreetFight\Board\BoardInterface;
+use StreetFight\Board\MatchBoardInterface;
 
 /**
  * Match interface
@@ -14,7 +14,7 @@ interface MatchInterface
     /**
      * Run the match
      *
-     * @return BoardInterface
+     * @return array
      */
-    public function fight(): BoardInterface;
+    public function fight(): array;
 }

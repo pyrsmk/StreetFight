@@ -4,24 +4,15 @@ declare(strict_types=1);
 
 namespace StreetFight\Board;
 
-use StreetFight\Challenger\ChallengerInterface;
-
 /**
  * Result interface
  */
 interface ResultInterface
 {
     /**
-     * Get the challenger
+     * Add the time to an array of results
      *
-     * @return ChallengerInterface
+     * @return array
      */
-    public function challenger(): ChallengerInterface;
-
-    /**
-     * Get the resulting time
-     *
-     * @return float
-     */
-    public function time(): float;
+    public function addTo(array $results): array;
 }

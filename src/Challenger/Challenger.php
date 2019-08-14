@@ -3,6 +3,9 @@
 namespace StreetFight\Challenger;
 
 use Illuminator\TimedTask;
+use StreetFight\Board\ResultInterface;
+use StreetFight\Board\Result;
+use function Funktions\mute;
 
 /**
  * A challenger
@@ -17,11 +20,11 @@ class Challenger implements ChallengerInterface
     private $name;
 
     /**
-     * The callback to run
+     * The callback to time
      *
      * @var callable
      */
-    private $task;
+    private $timedTask;
 
     /**
      * Constructor
@@ -32,26 +35,21 @@ class Challenger implements ChallengerInterface
     public function __construct(string $name, callable $callback)
     {
         $this->name = $name;
-        $this->task = new TimedTask($callback);
-    }
-
-    /**
-     * Return the challenger's name
-     *
-     * @return string
-     */
-    public function name(): string
-    {
-        return $this->name;
+        $this->timedTask = new TimedTask($callback);
     }
 
     /**
      * Run the callback and return the elapsed time
      *
-     * @return float
+     * @return ResultInterface
      */
-    public function kick(): float
+    public function kick(): ResultInterface
     {
-        return $this->task->read();
+        return mute(function () {
+            return new Result(
+                $this->name,
+                $this->timedTask->read()
+            );
+        });
     }
 }

@@ -2,22 +2,17 @@
 
 namespace StreetFight\Challenger;
 
+use StreetFight\Board\ResultInterface;
+
 /**
  * Challenger interface
  */
 interface ChallengerInterface
 {
     /**
-     * Return the challenger's name
-     *
-     * @return string
-     */
-    public function name(): string;
-
-    /**
      * Run the callback and return the elapsed time
      *
-     * @return float
+     * @return ResultInterface
      */
-    public function kick(): float;
+    public function kick(): ResultInterface;
 }

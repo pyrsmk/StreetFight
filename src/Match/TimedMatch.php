@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace StreetFight\Match;
 
-use Illuminator\Chrono;
-use StreetFight\Challenger\ChallengerListInterface;
-use StreetFight\Hook\HookInterface;
-use StreetFight\Board\BoardInterface;
-use StreetFight\Board\Board;
+use Illuminator\LazyChrono;
+use StreetFight\Round\RoundInterface;
 use function Funktions\above;
+use function Funktions\clean;
 
 /**
  * A match with a maximum time
  */
-final class TimedMatch implements RoundsInterface
+final class TimedMatch implements MatchInterface
 {
     /**
      * The maximum time
@@ -24,68 +22,37 @@ final class TimedMatch implements RoundsInterface
     private $time;
 
     /**
-     * Challenger list
+     * The round
      *
-     * @var ChallengerListInterface
+     * @var RoundInterface
      */
-    private $challengerList;
-
-    /**
-     * BEFORE hook
-     *
-     * @var HookInterface
-     */
-    private $beforeHook;
-
-    /**
-     * AFTER hook
-     *
-     * @var HookInterface
-     */
-    private $afterHook;
+    private $round;
 
     /**
      * Constructor
      *
      * @param int $time
-     * @param ChallengerListInterface $challengerList
-     * @param HookInterface $beforeHook
-     * @param HookInterface $afterHook
+     * @param RoundInterface $round
      */
-    public function __construct(
-        int $time,
-        ChallengerListInterface $challengerList,
-        HookInterface $beforeHook,
-        HookInterface $afterHook
-    )
+    public function __construct(int $time, RoundInterface $round)
     {
         $this->time = above($time, 0);
-        $this->challengerList = $challengerList;
-        $this->beforeHook = $beforeHook;
-        $this->afterHook = $afterHook;
+        $this->round = $round;
     }
 
     /**
      * Run the match
      *
-     * @return BoardInterface
+     * @return array
      */
-    public function fight(): BoardInterface
+    public function fight(): array
     {
-        $board = new Board();
-        $chrono = new Chrono();
-        $chrono->start();
-        do {
-            $round = new Round(
-                $this->challengerList,
-                $this->beforeHook,
-                $this->afterHook
-            );
-            $board = $board->with(
-                $round->fight()
-            );
-        }
-        while($chrono->readAsMilliseconds() < $this->time);
-        return $board;
+        $chrono = new LazyChrono();
+        return loop_until(function () use ($chrono) {
+            yield clean(function () {
+                return $this->round->fight();
+            });
+            return $chrono->readAsMilliseconds() < $this->time;
+        });
     }
 }

@@ -12,16 +12,16 @@ final class RoundedSecondsReport implements ReportInterface
     /**
      * The original report
      *
-     * @var ReportInterface
+     * @var Report
      */
     private $report;
 
     /**
      * Constructor
      *
-     * @param ReportInterface $report
+     * @param Report $report
      */
-    public function __construct(ReportInterface $report)
+    public function __construct(Report $report)
     {
         $this->report = $report;
     }

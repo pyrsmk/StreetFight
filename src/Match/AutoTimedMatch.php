@@ -4,11 +4,10 @@ declare(strict_types=1);
 
 namespace StreetFight\Match;
 
-use Illuminator\Chrono;
-use StreetFight\Challenger\ChallengerListInterface;
-use StreetFight\Hook\HookInterface;
-use StreetFight\Board\BoardInterface;
-use StreetFight\Board\Board;
+use Illuminator\LazyChrono;
+use StreetFight\Round\RoundInterface;
+use function Funktions\loop_until;
+use function Funktions\clean;
 
 /**
  * A match with an auto-computed maximum time
@@ -16,68 +15,37 @@ use StreetFight\Board\Board;
 final class AutoTimedMatch implements MatchInterface
 {
     /**
-     * Challenger list
+     * The round
      *
-     * @var ChallengerListInterface
+     * @var RoundInterface
      */
-    private $challengerList;
-
-    /**
-     * BEFORE hook
-     *
-     * @var HookInterface
-     */
-    private $beforeHook;
-
-    /**
-     * AFTER hook
-     *
-     * @var HookInterface
-     */
-    private $afterHook;
+    private $round;
 
     /**
      * Constructor
      *
-     * @param ChallengerListInterface $challengerList
-     * @param HookInterface $beforeHook
-     * @param HookInterface $afterHook
+     * @param RoundInterface $round
      */
-    public function __construct(
-        ChallengerListInterface $challengerList,
-        HookInterface $beforeHook,
-        HookInterface $afterHook
-    )
+    public function __construct(RoundInterface $round)
     {
-        $this->challengerList = $challengerList;
-        $this->beforeHook = $beforeHook;
-        $this->afterHook = $afterHook;
+        $this->round = $round;
     }
 
     /**
      * Run the match
      *
-     * @return BoardInterface
+     * @return array
      */
-    public function fight(): BoardInterface
+    public function fight(): array
     {
-        $board = new Board();
-        $chrono = new Chrono();
-        $chrono->start();
-        do {
-            $round = new Round(
-                $this->challengerList,
-                $this->beforeHook,
-                $this->afterHook
-            );
-            $board = $board->with(
-                $round->fight()
-            );
-            if (!isset($max_time)) {
-                $max_time = $chrono->readAsMilliseconds() * 10;
-            }
-        }
-        while($chrono->readAsMilliseconds() < $max_time);
-        return $board;
+        $chrono = new LazyChrono();
+        $max_time = null;
+        return loop_until(function () use ($chrono, &$max_time) {
+            yield clean(function () {
+                return $this->round->fight();
+            });
+            return $chrono->readAsMilliseconds()
+                < $max_time ?? $chrono->readAsMilliseconds() * 10;
+        });
     }
 }

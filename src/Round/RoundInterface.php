@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace StreetFight\Round;
 
-use StreetFight\Board\RoundBoardInterface;
+use StreetFight\Board\BoardInterface;
 
 /**
  * Round interface
@@ -14,7 +14,7 @@ interface RoundInterface
     /**
      * Run the round
      *
-     * @return RoundBoardInterface
+     * @return BoardInterface
      */
-    public function fight(): RoundBoardInterface;
+    public function fight(): BoardInterface;
 }
