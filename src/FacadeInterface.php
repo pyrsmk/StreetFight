@@ -9,6 +9,12 @@ use StreetFight\Board\BoardInterface;
  */
 interface FacadeInterface
 {
+    const SECONDS_REPORT = 1;
+    const ROUNDEDSECONDS_REPORT = 2;
+    const MICROSECONDS_REPORT = 3;
+    const MILLISECONDS_REPORT = 4;
+    const PERCENTAGE_REPORT = 5;
+
     /**
      * Add a new challenger
      *
@@ -46,7 +52,7 @@ interface FacadeInterface
      * Let's start the fight!
      *
      * @param integer $time
-     * @return BoardInterface
+     * @return array
      */
-    public function fight(int $time = -1): BoardInterface;
+    public function fight(int $time = -1): array;
 }

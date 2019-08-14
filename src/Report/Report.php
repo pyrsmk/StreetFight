@@ -2,6 +2,7 @@
 
 namespace StreetFight\Report;
 
+use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Board\BoardInterface;
 
 /**
