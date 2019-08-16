@@ -2,7 +2,7 @@
 
 namespace StreetFight\Report;
 
-use StreetFight\Board\BoardInterface;
+use StreetFight\Result\ResultListInterface;
 use StreetFight\Match\MatchInterface;
 
 /**
@@ -36,8 +36,8 @@ final class Report implements ReportInterface
     {
         return array_reduce(
             $this->match->fight(),
-            function (array $final, BoardInterface $board) {
-                foreach ($board->results() as $result) {
+            function (array $final, ResultListInterface $resultList) {
+                foreach ($resultList->results() as $result) {
                     $final = $result->addTo($final);
                 }
                 return $final;

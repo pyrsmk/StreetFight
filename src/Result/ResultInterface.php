@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Board;
+namespace StreetFight\Result;
 
 /**
  * Result interface

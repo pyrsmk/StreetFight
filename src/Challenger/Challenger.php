@@ -3,8 +3,8 @@
 namespace StreetFight\Challenger;
 
 use Illuminator\TimedTask;
-use StreetFight\Board\ResultInterface;
-use StreetFight\Board\Result;
+use StreetFight\Result\ResultInterface;
+use StreetFight\Result\Result;
 use function Funktions\mute;
 
 /**

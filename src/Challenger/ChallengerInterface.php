@@ -2,7 +2,7 @@
 
 namespace StreetFight\Challenger;
 
-use StreetFight\Board\ResultInterface;
+use StreetFight\Result\ResultInterface;
 
 /**
  * Challenger interface

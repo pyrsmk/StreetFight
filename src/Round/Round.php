@@ -7,9 +7,9 @@ namespace StreetFight\Round;
 use StreetFight\Challenger\ChallengerListInterface;
 use StreetFight\Hook\HookInterface;
 use StreetFight\Hook\NullHook;
-use StreetFight\Board\BoardInterface;
-use StreetFight\Board\Board;
-use StreetFight\Board\Result;
+use StreetFight\Result\ResultListInterface;
+use StreetFight\Result\ResultList;
+use StreetFight\Result\Result;
 use function Funktions\loop;
 
 /**
@@ -59,11 +59,11 @@ final class Round implements RoundInterface
     /**
      * Run the round
      *
-     * @return BoardInterface
+     * @return ResultListInterface
      */
-    public function fight(): BoardInterface
+    public function fight(): ResultListInterface
     {
-        return new Board(
+        return new ResultList(
             ...loop($this->challengerList->items(), function ($challenger) {
                 $this->beforeHook->run();
                 yield $challenger->kick();

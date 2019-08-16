@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Board;
+namespace StreetFight\Result;
 
 use Generator;
 
 /**
- * Board interface
+ * Result list interface
  */
-interface BoardInterface
+interface ResultListInterface
 {
     /**
      * Get the results

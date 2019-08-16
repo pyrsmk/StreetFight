@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace StreetFight\Board;
+namespace StreetFight\Result;
 
 use Generator;
 use function Funktions\array_to_generator;
@@ -10,7 +10,7 @@ use function Funktions\array_to_generator;
 /**
  * A result list for each round
  */
-final class Board implements BoardInterface
+final class ResultList implements ResultListInterface
 {
     /**
      * Result list
