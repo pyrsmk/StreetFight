@@ -2,6 +2,8 @@
 
 StreetFight is a benchmarking tool aiming to quickly know what code have better performance against another one. It is not intended to be an exhaustive profiling library and probably won't grow any further.
 
+Note that StreetFight is following the [Elegant Objects](https://www.elegantobjects.org/) principle, and uses some functional programming internally with the help of [Funktions](https://github.com/pyrsmk/Funktions).
+
 ## Install
 
 StreetFight requires PHP 7.2.
@@ -10,24 +12,50 @@ StreetFight requires PHP 7.2.
 composer require pyrsmk/streetfight
 ```
 
-## Use
+## Example
+
+Here's the common way to execute a benchmark and retrieve a report directly from it. This example compares the performance of pre-increment and post-increment instructions.
 
 ```php
-$match = new StreetFight\Facade(
-    StreetFight\Facade::PERCENTAGE_REPORT
-);
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Match\AutoTimedMatch;
+use StreetFight\Report\Report;
+use StreetFight\Report\PercentageReport;
+use StreetFight\Report\DescSortedReport;
 
-$match->add('Pre-increment', function () {
-    $i = 0;
-    ++$i;
-});
+$report =
+    // Sort the report in descending direction
+    new DescSortedReport(
+        // Convert the seconds report to percentage
+        new PercentageReport(
+            // Create a report to process match results
+            new Report(
+                // Create a match to process the benchmark for a certain time
+                // (here, AutoTimedMatch will compute automatically the time of the match)
+                // (see below for types of match)
+                new AutoTimedMatch(
+                    // A typical round...
+                    new Round(
+                        // ...with a challenger list
+                        new ChallengerList(
+                            new Challenger('Pre-increment', function () {
+                                $i = 0;
+                                ++$i;
+                            }),
+                            new Challenger('Post-increment', function () {
+                                $i = 0;
+                                $i++;
+                            })
+                        )
+                    )
+                )
+            )
+        )
+    );
 
-$match->add('Post-increment', function () {
-    $i = 0;
-    $i++;
-});
-
-var_dump($match->fight());
+var_dump($report->asPercentages());
 /*
     [
         'Post-increment' => 100,
@@ -36,58 +64,139 @@ var_dump($match->fight());
 */
 ```
 
-## Set some hooks
+## Match objects
 
-If you need to run some specific routines, you can use some hooks:
+There are 3 types of matches:
+
+- `StreetFight\Match\Match(int $rounds, RoundInterface $round)`: it will take a number of rounds to run, and a `StreetFight\Round\Round` object
+- `StreetFight\Match\TimedMatch(int $time, RoundInterface $round)`: it will take a minimum time in milliseconds while the benchmark will run, and a `StreetFight\Round\Round` object
+- `StreetFight\Match\AutoTimedMatch(RoundInterface $round)`: contrary to `TimedMatch`, it will automatically compute the maximum time for the benchmark to run, and only accepts a `StreetFight\Round\Round` object as parameter
 
 ```php
-$match->begin(function () {
-    // Run at the very beginning
-});
-
-$match->before(function () {
-    // Run before each task, at each iteration
-});
-
-$match->after(function () {
-    // Run after each task, at each iteration
-});
-
-$match->end(function () {
-    // Run at the very end
-});
+new Match(
+    100, // Will iterate 100 times
+    new Round(
+        new ChallengerList(
+            new Challenger('Pre-increment', function () {
+                $i = 0;
+                ++$i;
+            }),
+            new Challenger('Post-increment', function () {
+                $i = 0;
+                $i++;
+            })
+        )
+    )
+)
 ```
 
-Here's an example:
+```php
+new TimedMatch(
+    5000, // Will run for 5 seconds at least
+    new Round(
+        new ChallengerList(
+            new Challenger('Pre-increment', function () {
+                $i = 0;
+                ++$i;
+            }),
+            new Challenger('Post-increment', function () {
+                $i = 0;
+                $i++;
+            })
+        )
+    )
+)
+```
 
 ```php
-$match->before(function () {
-    touch('foo.txt');
-});
+// The recommended and simplest way to run the benchmark
+new AutoTimedMatch(
+    new Round(
+        new ChallengerList(
+            new Challenger('Pre-increment', function () {
+                $i = 0;
+                ++$i;
+            }),
+            new Challenger('Post-increment', function () {
+                $i = 0;
+                $i++;
+            })
+        )
+    )
+)
+```
 
-$match->after(function () {
-    unlink('foo.txt');
-});
+## Report objects
 
-$match->add('file_put_contents (overwrite)', function () {
-    file_put_contents('foo.txt', 'bar');
-});
+There are several types of `Report` objects:
 
-$match->add('fwrite (overwrite)', function () {
-    $f = fopen('foo.txt', 'w');
-    fwrite($f, 'bar');
-    fclose($f);
-});
+- `StreetFight\Report\Report(MatchInterface $match)`: the main `Report` object, can only take a `Match` object as parameter; the results are returned as raw seconds
+- `StreetFight\Report\RoundedSecondsReport`: a decorator for the main `Report` object; the results are returned as seconds rounded to 2 decimal digits
+- `StreetFight\Report\MillisecondsReport`: a decorator for the main `Report` object; the results are returned as milliseconds
+- `StreetFight\Report\MicrosecondsReport`: a decorator for the main `Report` object; the results are returned as microseconds
+- `StreetFight\Report\PercentageReport`: a decorator for the main `Report` object; the results are returned in percentage
+- `StreetFight\Report\AscSortedReport`: a decorator that sorts a report in ascending direction
+- `StreetFight\Report\DescSortedReport`: a decorator that sorts a report in descending direction
 
-$match->add('file_put_contents (append)', function () {
-    file_put_contents('foo.txt', 'bar', FILE_APPEND);
-});
+```php
+// Sort the report
+new AscSortedReport(
+    // Format the report results in microseconds
+    new MicrosecondsReport(
+        // The main Report object
+        new Report(
+            new AutoTimedMatch(
+                new Round(
+                    new ChallengerList(
+                        new Challenger('Pre-increment', function () {
+                            $i = 0;
+                            ++$i;
+                        }),
+                        new Challenger('Post-increment', function () {
+                            $i = 0;
+                            $i++;
+                        })
+                    )
+                )
+            )
+        )
+    )
+)
+```
 
-$match->add('fwrite (append)', function () {
-    $f = fopen('foo.txt', 'a');
-    fwrite($f, 'bar');
-    fclose($f);
-});
+## Set BEFORE and AFTER hooks
+
+If you need to run some specific routines, you can set them in the `Round` object:
+
+```php
+new Round(
+    new ChallengerList(
+        new Challenger('file_put_contents (overwrite)', function () {
+            file_put_contents('foo.txt', 'bar');
+        }),
+        new Challenger('fwrite (overwrite)', function () {
+            $f = fopen('foo.txt', 'w');
+            fwrite($f, 'bar');
+            fclose($f);
+        }),
+        new Challenger('file_put_contents (append)', function () {
+            file_put_contents('foo.txt', 'bar', FILE_APPEND);
+        }),
+        new Challenger('fwrite (append)', function () {
+            $f = fopen('foo.txt', 'a');
+            fwrite($f, 'bar');
+            fclose($f);
+        }),
+    ),
+    // Set a hook that will be run BEFORE each task of each iteration
+    new Hook(function () {
+        touch('foo.txt');
+    }),
+    // Set a hook that will be run AFTER each task of each iteration
+    new Hook(function () {
+        unlink('foo.txt');
+    })
+)
 ```
 
 ## Passing some data to tasks
@@ -100,63 +209,37 @@ $data = [
     'content' => 'bar'
 ];
 
-$match->before(function () use ($data) {
-    touch($data['filename']);
-});
-
-$match->after(function () use ($data) {
-    unlink($data['filename']);
-});
-
-$match->add('file_put_contents (overwrite)', function () use ($data) {
-    file_put_contents($data['filename'], $data['content']);
-});
-
-$match->add('fwrite (overwrite)', function () use ($data) {
-    $f = fopen($data['filename'], 'w');
-    fwrite($f, $data['content']);
-    fclose($f);
-});
-
-$match->add('file_put_contents (append)', function () use ($data) {
-    file_put_contents($data['filename'], $data['content'], FILE_APPEND);
-});
-
-$match->add('fwrite (append)', function () use ($data) {
-    $f = fopen($data['filename'], 'a');
-    fwrite($f, $data['content']);
-    fclose($f);
-});
-```
-
-## Reports
-
-There are different report formats available as constants in the `StreetFight\Facade` object:
-
-- `SECONDS_REPORT` (default)
-- `ROUNDEDSECONDS_REPORT`
-- `MICROSECONDS_REPORT`
-- `MILLISECONDS_REPORT`
-- `PERCENTAGE_REPORT`
-
-```php
-$match = new StreetFight\Facade(
-    StreetFight::ROUNDEDSECONDS_REPORT
-);
-```
-
-## Running time
-
-By default, the maximum time of the global benchmark will be automatically computed so the results will be more accurate. But you can specify an arbitrary time (in milliseconds) in the `fight()` method. Please note that if a task takes 10 seconds to execute, defining the maximum time to 1 second won't decrease the real time: the whole iteration will be completed before exiting the benchmark routine.
-
-```php
-// The benchmark will took AT LEAST 2 seconds
-$match->fight(2000);
+new Round(
+    new ChallengerList(
+        new Challenger('file_put_contents (overwrite)', function () use ($data) {
+            file_put_contents($data['filename'], $data['content']);
+        }),
+        new Challenger('fwrite (overwrite)', function () use ($data) {
+            $f = fopen($data['filename'], 'w');
+            fwrite($f, $data['content']);
+            fclose($f);
+        }),
+        new Challenger('file_put_contents (append)', function () use ($data) {
+            file_put_contents($data['filename'], $data['content'], FILE_APPEND);
+        }),
+        new Challenger('fwrite (append)', function () use ($data) {
+            $f = fopen($data['filename'], 'a');
+            fwrite($f, $data['content']);
+            fclose($f);
+        }),
+    ),
+    new Hook(function () {
+        touch($data['filename']);
+    }),
+    new Hook(function () {
+        unlink($data['filename']);
+    })
+)
 ```
 
 ## Side note
 
-Depending on what code you're benchmarking, execution time can exceed the `max_execution_time` directive of PHP. Just set `set_time_limit(0)` and you'll be all good.
+Depending on what code you're benchmarking, the execution time can exceed the `max_execution_time` directive of PHP. Just set `set_time_limit(0)` and you'll be all good.
 
 ## License
 
