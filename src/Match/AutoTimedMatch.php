@@ -14,7 +14,7 @@ use function Funktions\clean;
  */
 final class AutoTimedMatch implements MatchInterface
 {
-    private const MULTIPLIER = 10;
+    private const MULTIPLIER = 20;
 
     /**
      * The round
