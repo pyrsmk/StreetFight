@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "9afa8a28b38b62ed8ae113ac0eca1d49",
+    "content-hash": "328e54a9c94c6d1141dcb85c8363c40e",
     "packages": [
         {
             "name": "pyrsmk/funktions",
-            "version": "0.7.0",
+            "version": "0.11.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/pyrsmk/Funktions.git",
-                "reference": "2c05738d1f9638fb6992d1e9a36d361ca050026b"
+                "reference": "2c1203baf6dc6eb81a6d05785bb81b0cab0d33b9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/2c05738d1f9638fb6992d1e9a36d361ca050026b",
-                "reference": "2c05738d1f9638fb6992d1e9a36d361ca050026b",
+                "url": "https://api.github.com/repos/pyrsmk/Funktions/zipball/2c1203baf6dc6eb81a6d05785bb81b0cab0d33b9",
+                "reference": "2c1203baf6dc6eb81a6d05785bb81b0cab0d33b9",
                 "shasum": ""
             },
             "require": {
@@ -32,9 +32,11 @@
                     "src/color.php",
                     "src/instruction.php",
                     "src/number.php",
+                    "src/output.php",
                     "src/regex.php",
                     "src/string.php",
-                    "src/system.php"
+                    "src/system.php",
+                    "src/various.php"
                 ]
             },
             "notification-url": "https://packagist.org/downloads/",
@@ -59,7 +61,7 @@
                 "regex",
                 "string"
             ],
-            "time": "2019-08-15T09:18:34+00:00"
+            "time": "2019-08-19T13:27:28+00:00"
         },
         {
             "name": "pyrsmk/illuminator",
@@ -106,7 +108,178 @@
             "time": "2019-08-13T15:27:25+00:00"
         }
     ],
-    "packages-dev": [],
+    "packages-dev": [
+        {
+            "name": "container-interop/container-interop",
+            "version": "1.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/container-interop/container-interop.git",
+                "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/container-interop/container-interop/zipball/79cbf1341c22ec75643d841642dd5d6acd83bdb8",
+                "reference": "79cbf1341c22ec75643d841642dd5d6acd83bdb8",
+                "shasum": ""
+            },
+            "require": {
+                "psr/container": "^1.0"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Interop\\Container\\": "src/Interop/Container/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Promoting the interoperability of container objects (DIC, SL, etc.)",
+            "homepage": "https://github.com/container-interop/container-interop",
+            "time": "2017-02-14T19:40:03+00:00"
+        },
+        {
+            "name": "psr/container",
+            "version": "1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/php-fig/container.git",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/php-fig/container/zipball/b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "reference": "b7ce3b176482dbbc1245ebf52b181af44c2cf55f",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.0"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Psr\\Container\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "PHP-FIG",
+                    "homepage": "http://www.php-fig.org/"
+                }
+            ],
+            "description": "Common Container Interface (PHP FIG PSR-11)",
+            "homepage": "https://github.com/php-fig/container",
+            "keywords": [
+                "PSR-11",
+                "container",
+                "container-interface",
+                "container-interop",
+                "psr"
+            ],
+            "time": "2017-02-14T16:28:37+00:00"
+        },
+        {
+            "name": "pyrsmk/chernozem",
+            "version": "4.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pyrsmk/Chernozem.git",
+                "reference": "64b5a32c02199b05cd43e38271884641133ef8d4"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pyrsmk/Chernozem/zipball/64b5a32c02199b05cd43e38271884641133ef8d4",
+                "reference": "64b5a32c02199b05cd43e38271884641133ef8d4",
+                "shasum": ""
+            },
+            "require": {
+                "container-interop/container-interop": "^1.1",
+                "php": ">=5.4"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Chernozem\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aurélien Delogu",
+                    "email": "dev@dreamysource.fr",
+                    "homepage": "http://dreamysource.io/project/chernozem"
+                }
+            ],
+            "description": "Dependency injection container for the masses",
+            "keywords": [
+                "container",
+                "dependency",
+                "injection"
+            ],
+            "time": "2016-08-02T14:08:20+00:00"
+        },
+        {
+            "name": "pyrsmk/minisuite",
+            "version": "5.0.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pyrsmk/MiniSuite.git",
+                "reference": "cc2863729bd3be0ba411d7c3acce2b32768447d3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pyrsmk/MiniSuite/zipball/cc2863729bd3be0ba411d7c3acce2b32768447d3",
+                "reference": "cc2863729bd3be0ba411d7c3acce2b32768447d3",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0",
+                "pyrsmk/chernozem": "^4.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "MiniSuite\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aurélien Delogu",
+                    "email": "dev@dreamysource.fr",
+                    "homepage": "http://dreamysource.io/project/minisuite"
+                }
+            ],
+            "description": "Functional micro unit testing framework",
+            "keywords": [
+                "chernozem",
+                "container",
+                "debug",
+                "micro",
+                "test",
+                "testing",
+                "unit"
+            ],
+            "time": "2016-08-02T08:18:19+00:00"
+        }
+    ],
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": [],

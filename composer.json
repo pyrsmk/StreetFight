@@ -16,6 +16,9 @@
         "pyrsmk/illuminator": "^3",
         "pyrsmk/funktions": "^0"
     },
+    "require-dev": {
+        "pyrsmk/minisuite": "^5.0"
+    },
     "autoload": {
         "psr-4" : {
             "StreetFight\\" : "src/"
