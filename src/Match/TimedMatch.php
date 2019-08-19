@@ -8,6 +8,7 @@ use Illuminator\LazyChrono;
 use StreetFight\Round\RoundInterface;
 use function Funktions\above;
 use function Funktions\clean;
+use function Funktions\loop_until;
 
 /**
  * A match with a maximum time
@@ -52,7 +53,7 @@ final class TimedMatch implements MatchInterface
             yield clean(function () {
                 return $this->round->fight();
             });
-            return $chrono->readAsMilliseconds() < $this->time;
+            return $chrono->readAsMilliseconds() >= $this->time;
         });
     }
 }
