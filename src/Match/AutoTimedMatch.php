@@ -14,6 +14,8 @@ use function Funktions\clean;
  */
 final class AutoTimedMatch implements MatchInterface
 {
+    private const MULTIPLIER = 10;
+
     /**
      * The round
      *
@@ -45,9 +47,9 @@ final class AutoTimedMatch implements MatchInterface
                 return $this->round->fight();
             });
             if ($max_time === null) {
-                $max_time = $chrono->readAsMilliseconds() * 10;
+                $max_time = $chrono->readAsMilliseconds() * self::MULTIPLIER;
             }
-            return $chrono->readAsMilliseconds() < $max_time;
+            return $chrono->readAsMilliseconds() >= $max_time;
         });
     }
 }
