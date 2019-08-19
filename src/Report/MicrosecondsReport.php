@@ -34,7 +34,7 @@ final class MicrosecondsReport implements ReportInterface
     public function compute() : array
     {
         return map($this->report->compute(), function ($time) {
-            return round($time * 10 ** 6, 2);
+            return round($time * 10 ** 6);
         });
     }
 }
