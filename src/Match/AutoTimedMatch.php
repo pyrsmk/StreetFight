@@ -44,8 +44,10 @@ final class AutoTimedMatch implements MatchInterface
             yield clean(function () {
                 return $this->round->fight();
             });
-            return $chrono->readAsMilliseconds()
-                < $max_time ?? $chrono->readAsMilliseconds() * 10;
+            if ($max_time === null) {
+                $max_time = $chrono->readAsMilliseconds() * 10;
+            }
+            return $chrono->readAsMilliseconds() < $max_time;
         });
     }
 }
