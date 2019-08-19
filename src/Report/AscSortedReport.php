@@ -2,6 +2,8 @@
 
 namespace StreetFight\Report;
 
+use function Funktions\array_asort;
+
 /**
  * A ascending sorted performance report
  */
