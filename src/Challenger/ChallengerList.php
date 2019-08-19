@@ -24,7 +24,7 @@ final class ChallengerList implements ChallengerListInterface
      *
      * @param ChallengerInterface[] $challengers
      */
-    public function __construct(ChallengerInterface ...$challengers = [])
+    public function __construct(ChallengerInterface ...$challengers)
     {
         $this->challengers = $challengers;
     }

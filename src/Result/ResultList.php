@@ -24,7 +24,7 @@ final class ResultList implements ResultListInterface
      *
      * @param ResultInterface[] $results
      */
-    public function __construct(ResultInterface ...$results = [])
+    public function __construct(ResultInterface ...$results)
     {
         $this->results = $results;
     }
