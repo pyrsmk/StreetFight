@@ -1,6 +1,6 @@
 {
     "name": "pyrsmk/streetfight",
-    "description": "A micro benchmarking tool",
+    "description": "A simple benchmarking tool",
     "keywords": [
         "micro",
         "benchmark"
@@ -9,10 +9,15 @@
     "authors": [{
         "name": "Aurélien Delogu",
         "email": "dev@dreamysource.fr",
-        "homepage": "http://dreamysource.io/project/streetfight"
+        "homepage": "https://github.com/pyrsmk/StreetFight"
     }],
     "require": {
-        "php": ">=7.1.0"
+        "php": ">=7.2.0",
+        "pyrsmk/illuminator": "^3",
+        "pyrsmk/funktions": "^0"
+    },
+    "require-dev": {
+        "pyrsmk/minisuite": "^5.0"
     },
     "autoload": {
         "psr-4" : {
