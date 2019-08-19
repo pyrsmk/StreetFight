@@ -73,6 +73,11 @@ There are 3 types of matches:
 - `StreetFight\Match\AutoTimedMatch(RoundInterface $round)`: contrary to `TimedMatch`, it will automatically compute the maximum time for the benchmark to run, and only accepts a `StreetFight\Round\Round` object as parameter
 
 ```php
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Match\Match;
+
 new Match(
     100, // Will iterate 100 times
     new Round(
@@ -91,6 +96,11 @@ new Match(
 ```
 
 ```php
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Match\TimedMatch;
+
 new TimedMatch(
     5000, // Will run for 5 seconds at least
     new Round(
@@ -109,6 +119,11 @@ new TimedMatch(
 ```
 
 ```php
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Match\AutoTimedMatch;
+
 // The recommended and simplest way to run the benchmark
 new AutoTimedMatch(
     new Round(
@@ -139,6 +154,14 @@ There are several types of `Report` objects:
 - `StreetFight\Report\DescSortedReport`: a decorator that sorts a report in descending direction
 
 ```php
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Match\AutoTimedMatch;
+use StreetFight\Report\Report;
+use StreetFight\Report\MicrosecondsReport;
+use StreetFight\Report\AscSortedReport;
+
 // Sort the report
 new AscSortedReport(
     // Format the report results in microseconds
@@ -169,6 +192,11 @@ new AscSortedReport(
 If you need to run some specific routines, you can set them in the `Round` object:
 
 ```php
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Hook\Hook;
+
 new Round(
     new ChallengerList(
         new Challenger('file_put_contents (overwrite)', function () {
@@ -204,6 +232,11 @@ new Round(
 As you can see from the above example, the same data is used across all tasks. Furthermore, we could need to generate random data at each iteration. But since mutability makes it really difficult for StreetFight to keep track on the data (and passing it into objects complicates the API), it has been decided to define it outside of StreetFight itself in a procedural way. So, here's how you would use arbitrary data, based on the previous example:
 
 ```php
+use StreetFight\Challenger\Challenger;
+use StreetFight\Challenger\ChallengerList;
+use StreetFight\Round\Round;
+use StreetFight\Hook\Hook;
+
 $data = [
     'filename' => 'foo.txt',
     'content' => 'bar'
