@@ -37,7 +37,7 @@ final class Report implements ReportInterface
         return array_reduce(
             $this->match->fight(),
             function (array $final, ResultListInterface $resultList) {
-                foreach ($resultList->results() as $result) {
+                foreach ($resultList->items() as $result) {
                     $final = $result->addTo($final);
                 }
                 return $final;

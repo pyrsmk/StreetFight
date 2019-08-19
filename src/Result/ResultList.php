@@ -34,7 +34,7 @@ final class ResultList implements ResultListInterface
      *
      * @return Generator
      */
-    public function results(): Generator
+    public function items(): Generator
     {
         yield from array_to_generator($this->results);
     }

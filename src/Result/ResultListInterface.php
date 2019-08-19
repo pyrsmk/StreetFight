@@ -16,5 +16,5 @@ interface ResultListInterface
      *
      * @return Generator
      */
-    public function results(): Generator;
+    public function items(): Generator;
 }
