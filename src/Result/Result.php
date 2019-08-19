@@ -46,11 +46,13 @@ final class Result implements ResultInterface
     {
         return condition(
             !isset($results[$this->name]),
-            function () {
-                return $this->time;
+            function () use ($results) {
+                $results[$this->name] = $this->time;
+                return $results;
             },
             function () use ($results) {
-                return $results[$this->name] + $this->time;
+                $results[$this->name] += $this->time;
+                return $results;
             }
         );
     }
