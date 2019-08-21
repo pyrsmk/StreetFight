@@ -6,6 +6,7 @@ namespace StreetFight\Match;
 
 use StreetFight\Round\RoundInterface;
 use function Funktions\clean;
+use function Funktions\loop;
 
 /**
  * A match with an auto-computed maximum time
