@@ -4,9 +4,7 @@ declare(strict_types=1);
 
 namespace StreetFight\Match;
 
-use Illuminator\LazyChrono;
 use StreetFight\Round\RoundInterface;
-use function Funktions\loop_until;
 use function Funktions\clean;
 
 /**
@@ -14,7 +12,7 @@ use function Funktions\clean;
  */
 final class AutoTimedMatch implements MatchInterface
 {
-    private const MULTIPLIER = 20;
+    private const ROUNDS = 10000;
 
     /**
      * The round
@@ -40,16 +38,10 @@ final class AutoTimedMatch implements MatchInterface
      */
     public function fight(): array
     {
-        $chrono = new LazyChrono();
-        $max_time = null;
-        return loop_until(function () use ($chrono, &$max_time) {
+        return loop(range(1, self::ROUNDS), function () {
             yield clean(function () {
                 return $this->round->fight();
             });
-            if ($max_time === null) {
-                $max_time = $chrono->readAsMilliseconds() * self::MULTIPLIER;
-            }
-            return $chrono->readAsMilliseconds() >= $max_time;
         });
     }
 }
