@@ -7,7 +7,6 @@ namespace StreetFight\Match;
 use Illuminator\LazyChrono;
 use StreetFight\Round\RoundInterface;
 use function Funktions\above;
-use function Funktions\clean;
 use function Funktions\loop_until;
 
 /**

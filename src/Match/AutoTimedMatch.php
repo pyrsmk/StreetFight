@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace StreetFight\Match;
 
 use StreetFight\Round\RoundInterface;
-use function Funktions\clean;
 use function Funktions\loop;
 
 /**

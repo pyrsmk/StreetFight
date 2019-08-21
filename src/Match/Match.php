@@ -7,7 +7,6 @@ namespace StreetFight\Match;
 use StreetFight\Round\RoundInterface;
 use function Funktions\above;
 use function Funktions\loop;
-use function Funktions\clean;
 
 /**
  * A street fight match
