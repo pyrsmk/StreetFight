@@ -48,9 +48,7 @@ final class Match implements MatchInterface
     public function fight(): array
     {
         return loop(range(1, $this->rounds), function () {
-            yield clean(function () {
-                return $this->round->fight();
-            });
+            yield $this->round->fight();
         });
     }
 }

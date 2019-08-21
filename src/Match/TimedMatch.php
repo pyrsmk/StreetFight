@@ -50,9 +50,7 @@ final class TimedMatch implements MatchInterface
     {
         $chrono = new LazyChrono();
         return loop_until(function () use ($chrono) {
-            yield clean(function () {
-                return $this->round->fight();
-            });
+            yield $this->round->fight();
             return $chrono->readAsMilliseconds() >= $this->time;
         });
     }

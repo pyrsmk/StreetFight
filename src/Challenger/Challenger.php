@@ -6,6 +6,7 @@ use Illuminator\TimedTask;
 use StreetFight\Result\ResultInterface;
 use StreetFight\Result\Result;
 use function Funktions\mute;
+use function Funktions\clean;
 
 /**
  * A challenger
@@ -45,11 +46,13 @@ class Challenger implements ChallengerInterface
      */
     public function kick(): ResultInterface
     {
-        return mute(function () {
-            return new Result(
-                $this->name,
-                $this->timedTask->read()
-            );
+        return clean(function () {
+            return mute(function () {
+                return new Result(
+                    $this->name,
+                    $this->timedTask->read()
+                );
+            });
         });
     }
 }

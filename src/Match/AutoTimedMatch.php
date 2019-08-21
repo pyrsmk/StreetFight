@@ -40,9 +40,7 @@ final class AutoTimedMatch implements MatchInterface
     public function fight(): array
     {
         return loop(range(1, self::ROUNDS), function () {
-            yield clean(function () {
-                return $this->round->fight();
-            });
+            yield $this->round->fight();
         });
     }
 }
