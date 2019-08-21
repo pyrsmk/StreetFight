@@ -141,121 +141,210 @@ $suite->expects('TimedMatch#fight(): run > 0ms and < 4ms')
 
 ################################################## StreetFight\Match\AutoTimedMatch
 
-$match = new StreetFight\Match\AutoTimedMatch($round);
+$match = new StreetFight\Match\AutoTimedMatch(
+    new StreetFight\Round\Round(
+        new StreetFight\Challenger\ChallengerList(
+            new StreetFight\Challenger\Challenger('foo', function () {
+            }),
+            new StreetFight\Challenger\Challenger('bar', function () {
+            }),
+            new StreetFight\Challenger\Challenger('foobar', function () {
+            })
+        )
+    )
+);
 
-$suite->expects('AutoTimedMatch#fight(): at least 15 results in the array')
+$suite->expects('AutoTimedMatch#fight(): 10000 results in the array')
     ->that(count($match->fight()))
-    ->isGreaterThanOrEqual(15);
-
-$time1 = microtime(true);
-$match->fight();
-$time2 = microtime(true);
-
-$suite->expects('AutoTimedMatch#fight(): run >= 57ms')
-    ->that($time2 - $time1)
-    ->isGreaterThanOrEqual(0.057);
+    ->equals(10000);
 
 ################################################## StreetFight\Report\Report
 
-$report = new StreetFight\Report\Report($match);
+$report = new StreetFight\Report\Report(
+    new StreetFight\Match\Match(
+        1,
+        new StreetFight\Round\Round(
+            new StreetFight\Challenger\ChallengerList(
+                new StreetFight\Challenger\Challenger('foo', function () {
+                }),
+                new StreetFight\Challenger\Challenger('bar', function () {
+                }),
+                new StreetFight\Challenger\Challenger('foobar', function () {
+                })
+            )
+        )
+    )
+);
 $results = $report->compute();
 
 $suite->expects('Report#compute(): computed result 1')
     ->that($results['foo'])
-    ->isGreaterThanOrEqual(0.019);
+    ->isFloat();
 
 $suite->expects('Report#compute(): computed result 2')
     ->that($results['bar'])
-    ->isGreaterThanOrEqual(0.019);
+    ->isFloat();
 
 $suite->expects('Report#compute(): computed result 3')
     ->that($results['foobar'])
-    ->isGreaterThanOrEqual(0.019);
+    ->isFloat();
 
 ################################################## StreetFight\Report\RoundedSecondsReport
 
 $report = new StreetFight\Report\RoundedSecondsReport(
-    new StreetFight\Report\Report($match)
+    new StreetFight\Report\Report(
+        new StreetFight\Match\Match(
+            1000,
+            new StreetFight\Round\Round(
+                new StreetFight\Challenger\ChallengerList(
+                    new StreetFight\Challenger\Challenger('foo', function () {
+                        usleep(30000);
+                    }),
+                    new StreetFight\Challenger\Challenger('bar', function () {
+                        usleep(30000);
+                    }),
+                    new StreetFight\Challenger\Challenger('foobar', function () {
+                        usleep(30000);
+                    })
+                )
+            )
+        )
+    )
 );
 $results = $report->compute();
 
 $suite->expects('RoundedSecondsReport#compute(): computed result 1')
     ->that($results['foo'])
-    ->isGreaterThanOrEqual(0.02);
+    ->isGreaterThanOrEqual(0.03);
 
 $suite->expects('RoundedSecondsReport#compute(): computed result 2')
     ->that($results['bar'])
-    ->isGreaterThanOrEqual(0.02);
+    ->isGreaterThanOrEqual(0.03);
 
 $suite->expects('RoundedSecondsReport#compute(): computed result 3')
     ->that($results['foobar'])
-    ->isGreaterThanOrEqual(0.02);
+    ->isGreaterThanOrEqual(0.03);
 
 ################################################## StreetFight\Report\MillisecondsReport
 
 $report = new StreetFight\Report\MillisecondsReport(
-    new StreetFight\Report\Report($match)
+    new StreetFight\Report\Report(
+        new StreetFight\Match\Match(
+            1000,
+            new StreetFight\Round\Round(
+                new StreetFight\Challenger\ChallengerList(
+                    new StreetFight\Challenger\Challenger('foo', function () {
+                        usleep(1000);
+                    }),
+                    new StreetFight\Challenger\Challenger('bar', function () {
+                        usleep(1000);
+                    }),
+                    new StreetFight\Challenger\Challenger('foobar', function () {
+                        usleep(1000);
+                    })
+                )
+            )
+        )
+    )
 );
 $results = $report->compute();
 
 $suite->expects('MillisecondsReport#compute(): computed result 1')
     ->that($results['foo'])
-    ->isGreaterThanOrEqual(19);
+    ->isGreaterThanOrEqual(1000);
 
 $suite->expects('MillisecondsReport#compute(): computed result 2')
     ->that($results['bar'])
-    ->isGreaterThanOrEqual(19);
+    ->isGreaterThanOrEqual(1000);
 
 $suite->expects('MillisecondsReport#compute(): computed result 3')
     ->that($results['foobar'])
-    ->isGreaterThanOrEqual(19);
+    ->isGreaterThanOrEqual(1000);
 
 ################################################## StreetFight\Report\MicrosecondsReport
 
 $report = new StreetFight\Report\MicrosecondsReport(
-    new StreetFight\Report\Report($match)
+    new StreetFight\Report\Report(
+        new StreetFight\Match\Match(
+            1000,
+            new StreetFight\Round\Round(
+                new StreetFight\Challenger\ChallengerList(
+                    new StreetFight\Challenger\Challenger('foo', function () {
+                        usleep(1);
+                    }),
+                    new StreetFight\Challenger\Challenger('bar', function () {
+                        usleep(1);
+                    }),
+                    new StreetFight\Challenger\Challenger('foobar', function () {
+                        usleep(1);
+                    })
+                )
+            )
+        )
+    )
 );
 $results = $report->compute();
 
 $suite->expects('MicrosecondsReport#compute(): computed result 1')
     ->that($results['foo'])
-    ->isGreaterThanOrEqual(19000);
+    ->isFloat()
+    ->isGreaterThanOrEqual(1000);
 
 $suite->expects('MicrosecondsReport#compute(): computed result 2')
     ->that($results['bar'])
-    ->isGreaterThanOrEqual(19000);
+    ->isFloat()
+    ->isGreaterThanOrEqual(1000);
 
 $suite->expects('MicrosecondsReport#compute(): computed result 3')
     ->that($results['foobar'])
-    ->isGreaterThanOrEqual(19000);
+    ->isFloat()
+    ->isGreaterThanOrEqual(1000);
 
 ################################################## StreetFight\Report\PercentageReport
 
 $report = new StreetFight\Report\PercentageReport(
-    new StreetFight\Report\Report($match)
+    new StreetFight\Report\Report(
+        new StreetFight\Match\Match(
+            1000,
+            new StreetFight\Round\Round(
+                new StreetFight\Challenger\ChallengerList(
+                    new StreetFight\Challenger\Challenger('foo', function () {
+                    }),
+                    new StreetFight\Challenger\Challenger('bar', function () {
+                    }),
+                    new StreetFight\Challenger\Challenger('foobar', function () {
+                    })
+                )
+            )
+        )
+    )
 );
 $results = $report->compute();
 
 $suite->expects('PercentageReport#compute(): computed result 1')
     ->that($results['foo'])
-    ->isGreaterThan(0)
+    ->isFloat()
+    ->isGreaterThanOrEqual(0)
     ->isLessThanOrEqual(100);
 
 $suite->expects('PercentageReport#compute(): computed result 2')
     ->that($results['bar'])
-    ->isGreaterThan(0)
+    ->isFloat()
+    ->isGreaterThanOrEqual(0)
     ->isLessThanOrEqual(100);
 
 $suite->expects('PercentageReport#compute(): computed result 3')
     ->that($results['foobar'])
-    ->isGreaterThan(0)
+    ->isFloat()
+    ->isGreaterThanOrEqual(0)
     ->isLessThanOrEqual(100);
 
 ################################################## StreetFight\Report\AscSortedReport
 
 $report = new StreetFight\Report\AscSortedReport(
     new StreetFight\Report\Report(
-        new StreetFight\Match\AutoTimedMatch(
+        new StreetFight\Match\Match(
+            1,
             new StreetFight\Round\Round(
                 new StreetFight\Challenger\ChallengerList(
                     new StreetFight\Challenger\Challenger('foo', function () {
@@ -282,7 +371,8 @@ $suite->expects('AscSortedReport#compute(): positions')
 
 $report = new StreetFight\Report\DescSortedReport(
     new StreetFight\Report\Report(
-        new StreetFight\Match\AutoTimedMatch(
+        new StreetFight\Match\Match(
+            1,
             new StreetFight\Round\Round(
                 new StreetFight\Challenger\ChallengerList(
                     new StreetFight\Challenger\Challenger('foo', function () {
